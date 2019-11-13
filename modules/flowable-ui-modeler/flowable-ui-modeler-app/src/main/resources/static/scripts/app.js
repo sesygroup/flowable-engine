@@ -64,6 +64,18 @@ flowableModeler
             templateUrl: appResourceRoot + 'views/process.html',
             controller: 'ProcessCtrl'
         })
+        .when('/choreographies', {
+            templateUrl: appResourceRoot + 'views/choreographies.html',
+            controller: 'ChoreographiesCtrl'
+        })
+        .when('/choreographies/:modelId', {
+            templateUrl: appResourceRoot + 'views/choreography.html',
+            controller: 'ChoreographyCtrl'
+        })
+        .when('/choreographies/:modelId/history/:modelHistoryId', {
+            templateUrl: appResourceRoot + 'views/choreography.html',
+            controller: 'ChoreographyCtrl'
+        })
         .when('/casemodels', {
             templateUrl: appResourceRoot + 'views/casemodels.html',
             controller: 'CaseModelsCtrl'
@@ -202,6 +214,11 @@ flowableModeler
                     'id': 'processes',
                     'title': 'GENERAL.NAVIGATION.PROCESSES',
                     'path': '/processes'
+                },
+                {
+                    'id': 'choreographies',
+                    'title': 'GENERAL.NAVIGATION.CHOREOGRAPHIES',
+                    'path': '/choreographies'
                 },
                 {
                     'id': 'casemodels',

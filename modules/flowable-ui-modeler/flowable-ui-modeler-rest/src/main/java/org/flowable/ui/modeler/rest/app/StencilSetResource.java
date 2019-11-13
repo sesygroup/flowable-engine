@@ -53,4 +53,15 @@ public class StencilSetResource {
             throw new InternalServerErrorException("Error reading bpmn stencil set json");
         }
     }
+
+    @RequestMapping(value = "/app/rest/stencil-sets/choreographyeditor", method = RequestMethod.GET, produces = "application/json")
+    public JsonNode getStencilSetForEditor() {
+        try {
+            JsonNode stencilNode = objectMapper.readTree(this.getClass().getClassLoader().getResourceAsStream("stencilset_choreography.json"));
+            return stencilNode;
+        } catch (Exception e) {
+            LOGGER.error("Error reading bpmn stencil set json", e);
+            throw new InternalServerErrorException("Error reading bpmn stencil set json");
+        }
+    }
 }

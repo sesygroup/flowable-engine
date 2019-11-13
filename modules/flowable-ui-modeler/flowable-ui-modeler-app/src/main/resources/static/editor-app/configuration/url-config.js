@@ -21,6 +21,10 @@ FLOWABLE.URL = {
     getStencilSet: function() {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/stencil-sets/editor?version=' + Date.now();
     },
+
+    getChoreographyStencilSet: function() {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/stencil-sets/choreographyeditor?version=' + Date.now();
+    },
     
     getCmmnStencilSet: function() {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/stencil-sets/cmmneditor?version=' + Date.now();
