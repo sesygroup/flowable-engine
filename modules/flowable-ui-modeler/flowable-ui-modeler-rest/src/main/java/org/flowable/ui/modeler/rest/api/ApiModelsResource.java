@@ -60,6 +60,11 @@ public class ApiModelsResource {
         return modelQueryService.importProcessModel(request, file);
     }
 
+    @RequestMapping(value = "/editor/import-choreography-model", method = RequestMethod.POST, produces = "application/json")
+    public ModelRepresentation importChoreographyModel(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+        return modelQueryService.importChoreographyModel(request, file);
+    }
+
     @RequestMapping(value = "/editor/models", method = RequestMethod.POST, produces = "application/json")
     public ModelRepresentation createModel(@RequestBody ModelRepresentation modelRepresentation) {
         modelRepresentation.setKey(modelRepresentation.getKey().replaceAll(" ", ""));

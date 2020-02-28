@@ -13448,6 +13448,20 @@ ORYX.Core.Shape = {
 												svgElemSequential.setAttributeNS(null, 'display', 'none');
 											}
 										} 
+
+										var svgElemLoop = this.node.ownerDocument.getElementById(this.id + 'loop');
+										
+										if(svgElemLoop) 
+										{
+											if (prop === 'Standard')
+											{
+												svgElemLoop.setAttributeNS(null, 'display', 'inherit');
+											}
+											else
+											{
+												svgElemLoop.setAttributeNS(null, 'display', 'none');
+											}
+										} 
 									}
 									return;
 									

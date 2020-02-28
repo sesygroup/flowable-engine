@@ -124,6 +124,10 @@ flowableModeler
             templateUrl: appResourceRoot + 'editor-app/editor.html',
             controller: 'EditorController'
         })
+        .when('/choreography-editor/:modelId', {
+            templateUrl: appResourceRoot + 'editor-app/editor.html',
+            controller: 'EditorController'
+        })
         .when('/form-editor/:modelId', {
             templateUrl: appResourceRoot + 'views/form-builder.html',
             controller: 'FormBuilderController'

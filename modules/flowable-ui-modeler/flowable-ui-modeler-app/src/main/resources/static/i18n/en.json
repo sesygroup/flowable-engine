@@ -1951,21 +1951,21 @@
           "TITLE" : "Shell task",
           "DESCRIPTION" : "An automatic task with shell batch logic"
         },
-        "SUBPROCESS" : {
-          "TITLE" : "Sub process",
-          "DESCRIPTION" : "A sub process scope"
+        "SUBCHOREOGRAPHY" : {
+          "TITLE" : "Sub choreography",
+          "DESCRIPTION" : "A sub choreography scope"
         },
-        "COLLAPSEDSUBPROCESS" : {
-          "TITLE" : "Collapsed Sub process",
-          "DESCRIPTION" : "A sub process scope"
+        "COLLAPSEDSUBCHOREOGRAPHY" : {
+          "TITLE" : "Collapsed Sub choreography",
+          "DESCRIPTION" : "A sub choreography scope"
         },
         "EVENTSUBPROCESS" : {
-          "TITLE" : "Event sub process",
-          "DESCRIPTION" : "A event sub process scope"
+          "TITLE" : "Event sub choreography",
+          "DESCRIPTION" : "A event sub choreography scope"
         },
-        "CALLACTIVITY" : {
-          "TITLE" : "Call activity",
-          "DESCRIPTION" : "A call activity"
+        "CALLCHOREOGRAPHY" : {
+          "TITLE" : "Call choreography activity",
+          "DESCRIPTION" : "A call choreography activity"
         },
         "EXCLUSIVEGATEWAY" : {
           "TITLE" : "Exclusive gateway",

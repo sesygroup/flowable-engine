@@ -140,7 +140,7 @@ angular.module('flowableModeler')
     
     $scope.openEditor = function() {
       if ($scope.model.process) {
-        $location.path("/editor/" + $scope.model.process.id);
+        $location.path("/choreography-editor/" + $scope.model.process.id);
       }
     };
       

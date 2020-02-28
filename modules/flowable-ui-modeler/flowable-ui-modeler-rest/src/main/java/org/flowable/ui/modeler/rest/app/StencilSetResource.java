@@ -54,8 +54,8 @@ public class StencilSetResource {
         }
     }
 
-    @RequestMapping(value = "/app/rest/stencil-sets/choreographyeditor", method = RequestMethod.GET, produces = "application/json")
-    public JsonNode getStencilSetForEditor() {
+    @RequestMapping(value = "/rest/stencil-sets/choreographyeditor", method = RequestMethod.GET, produces = "application/json")
+    public JsonNode getChoreographyStencilSetForEditor() {
         try {
             JsonNode stencilNode = objectMapper.readTree(this.getClass().getClassLoader().getResourceAsStream("stencilset_choreography.json"));
             return stencilNode;

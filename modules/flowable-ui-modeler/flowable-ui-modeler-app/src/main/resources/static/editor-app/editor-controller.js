@@ -182,6 +182,8 @@ angular.module('flowableModeler')
             var modelMetaData = editorManager.getBaseModelData();
             if (modelMetaData.model.stencilset.namespace == 'http://b3mn.org/stencilset/cmmn1.1#') {
                 return 'cmmn1.1';
+            } else if (modelMetaData.model.stencilset.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#') {
+                return 'bpmn2.0_choreography';
             } else {
                 return 'bpmn2.0';
             }
@@ -400,7 +402,9 @@ angular.module('flowableModeler')
 	    return response;
 	}).then(function (modelData) {
 	    if(modelData.data.model.stencilset.namespace == 'http://b3mn.org/stencilset/cmmn1.1#') {
-	       return $http.get(FLOWABLE.URL.getCmmnStencilSet());
+           return $http.get(FLOWABLE.URL.getCmmnStencilSet());
+        } else if (modelData.data.model.stencilset.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#') {
+            return $http.get(FLOWABLE.URL.getChoreographyStencilSet());
 	    } else {
 	       return $http.get(FLOWABLE.URL.getStencilSet());
 	    }

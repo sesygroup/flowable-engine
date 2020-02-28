@@ -67,6 +67,8 @@ angular.module('flowableModeler')
                 quickMenuDefinition = ['HumanTask', 'Association'];
                 ignoreForPaletteDefinition = ['CasePlanModel'];
                 
+           // } else if (data.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#'){
+
             } else {
                 quickMenuDefinition = ['UserTask', 'EndNoneEvent', 'ExclusiveGateway', 
                                          'CatchTimerEvent', 'ThrowNoneEvent', 'TextAnnotation',
@@ -164,7 +166,10 @@ angular.module('flowableModeler')
                         stencilItem.canConnectTo = true;
                       }
                       
-                  } else {
+                 // } else if (data.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#') {
+                    
+                    
+                } else {
                       if (stencilRole === 'sequence_start') {
                         stencilItem.canConnect = true;
                       } else if (stencilRole === 'sequence_end') {

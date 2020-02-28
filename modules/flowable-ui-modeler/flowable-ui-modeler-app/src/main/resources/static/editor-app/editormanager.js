@@ -192,6 +192,10 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
                 stencilId = 'CMMNDiagram';
                 stencilSetNamespace = 'http://b3mn.org/stencilset/cmmn1.1#';
                 stencilSetUrl = '../editor/stencilsets/cmmn1.1/cmmn1.1.json';
+            } else if (modelMetaData.model.stencilset.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#') {
+                stencilId = 'BPMNDiagram';
+                stencilSetNamespace = 'http://b3mn.org/stencilset/bpmn2.0_choreography#';
+                stencilSetUrl = '../editor/stencilsets/bpmn2.0_choreography/bpmn2.0_choreography.json';
             } else {
                 stencilId = 'BPMNDiagram';
                 stencilSetNamespace = 'http://b3mn.org/stencilset/bpmn2.0#';

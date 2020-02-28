@@ -133,6 +133,11 @@ public class BpmnJsonConverter implements EditorJsonConstants, StencilConstants,
         // artifacts
         TextAnnotationJsonConverter.fillTypes(convertersToBpmnMap, convertersToJsonMap);
         DataStoreJsonConverter.fillTypes(convertersToBpmnMap, convertersToJsonMap);
+        
+        // choreography
+        ChoreographyTaskJsonConverter.fillTypes(convertersToBpmnMap, convertersToJsonMap);
+        CallChoreographyJsonConverter.fillTypes(convertersToBpmnMap, convertersToJsonMap);
+        SubChoreographyJsonConverter.fillTypes(convertersToBpmnMap, convertersToJsonMap);
     }
 
     private static final List<String> DI_CIRCLES = new ArrayList<>();

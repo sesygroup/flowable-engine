@@ -38,6 +38,9 @@ public interface StencilConstants {
     final String STENCIL_EVENT_SUB_PROCESS = "EventSubProcess";
     final String STENCIL_ADHOC_SUB_PROCESS = "AdhocSubProcess";
     final String STENCIL_CALL_ACTIVITY = "CallActivity";
+    final String STENCIL_SUB_CHOREOGRAPHY = "SubChoreography";
+    final String STENCIL_COLLAPSED_SUB_CHOREOGRAPHY = "CollapsedSubChoreography";
+    final String STENCIL_CALL_CHOREOGRAPHY = "CallChoreography";
 
     final String STENCIL_POOL = "Pool";
     final String STENCIL_LANE = "Lane";
@@ -55,6 +58,7 @@ public interface StencilConstants {
     final String STENCIL_TASK_HTTP = "HttpTask";
     final String STENCIL_TASK_SHELL = "ShellTask";
     final String STENCIL_TASK_DECISION = "DecisionTask";
+    final String STENCIL_TASK_CHOREOGRAPHY = "ChoreographyTask";
 
     final String STENCIL_GATEWAY_EXCLUSIVE = "ExclusiveGateway";
     final String STENCIL_GATEWAY_PARALLEL = "ParallelGateway";
@@ -319,4 +323,9 @@ public interface StencilConstants {
     final String PROPERTY_SHELLTASK_DIRECTORY = "shelldirectory";
 
     final String PROPERTY_FOR_COMPENSATION = "isforcompensation";
+    
+    final String PROPERTY_INITIATING_PARTECIPANT_REF = "initiatingpartecipantref";
+    final String PROPERTY_PERTECIPANT_REF = "partecipantref";
+    final String PROPERTY_INITIATING_MESSAGE = "initiatingmessage";
+    final String PROPERTY_RETURN_MESSAGE = "returnmessage";
 }

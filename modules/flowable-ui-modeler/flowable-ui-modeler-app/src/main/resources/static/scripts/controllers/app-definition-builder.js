@@ -36,6 +36,10 @@ angular.module('flowableModeler')
         {
             id: 'cmmn',
             title: 'CMMN models'
+        },
+        {
+            id: 'choreography',
+            title: 'Choreography models'
         }
     ];
     
@@ -191,6 +195,7 @@ angular.module('flowableModeler')
         loading: false,
         selectedModels: [],
         selectedCmmnModels: [],
+        selectedChoreographyModels: [],
         activeTab: 'bpmn'
     };
     
@@ -205,6 +210,12 @@ angular.module('flowableModeler')
             $scope.popup.selectedCmmnModels.push($rootScope.currentAppDefinition.definition.cmmnModels[i].id);
         }
     }
+
+    if ($rootScope.currentAppDefinition.definition.choreographyModels) {
+        for (var i = 0; i < $rootScope.currentAppDefinition.definition.choreographyModels.length; i++) {
+            $scope.popup.selectedChoreographyModels.push($rootScope.currentAppDefinition.definition.choreographyModels[i].id);
+        }
+    }
     
     $scope.tabs = [
         {
@@ -214,6 +225,10 @@ angular.module('flowableModeler')
         {
             id: 'cmmn',
             title: 'CMMN models'
+        },
+        {
+            id: 'choreography',
+            title: 'Choreography models'
         }
     ];
     
@@ -232,6 +247,15 @@ angular.module('flowableModeler')
         $http({method: 'GET', url: FLOWABLE.APP_URL.getCmmnModelsForAppDefinitionUrl()}).
           success(function(data, status, headers, config) {
               $scope.popup.cmmnModels = data;
+              $scope.popup.loading = false;
+          }).
+          error(function(data, status, headers, config) {
+             $scope.popup.loading = false;
+          });
+
+          $http({method: 'GET', url: FLOWABLE.APP_URL.getChoreographyModelsForAppDefinitionUrl()}).
+          success(function(data, status, headers, config) {
+              $scope.popup.choreographyModels = data;
               $scope.popup.loading = false;
           }).
           error(function(data, status, headers, config) {
@@ -300,6 +324,37 @@ angular.module('flowableModeler')
         }
         $rootScope.currentAppDefinition.definition.cmmnModels = modelArray;
     };
+
+    $scope.selectChoreographyModel = function(model) {
+        var index = $scope.popup.selectedCmmnModels.indexOf(model.id);
+        if (index >= 0) {
+            $scope.popup.selectedChoreographyModels.splice(index, 1);
+        } else {
+            $scope.popup.selectedChoreographyModels.push(model.id);
+        }
+        
+        var modelArray = [];
+        for (var i = 0; i < $scope.popup.choreographyModels.data.length; i++) {
+            if ($scope.popup.selectedChoreographyModels.indexOf($scope.popup.choreographyModels.data[i].id) >= 0) {
+                var selectedModel = $scope.popup.choreographyModels.data[i];
+                var summaryModel = {
+                    id: selectedModel.id,
+                    name: selectedModel.name,
+                    version: selectedModel.version,
+                    modelType: selectedModel.modelType,
+                    description: selectedModel.description,
+                    stencilSetId: selectedModel.stencilSet,
+                    createdByFullName: selectedModel.createdByFullName,
+                    createdBy: selectedModel.createdBy,
+                    lastUpdatedByFullName: selectedModel.lastUpdatedByFullName,
+                    lastUpdatedBy: selectedModel.lastUpdatedBy,
+                    lastUpdated: selectedModel.lastUpdated
+                };
+                modelArray.push(summaryModel);
+            }
+        }
+        $rootScope.currentAppDefinition.definition.choreographyModels = modelArray;
+    };
     
     $scope.isModelSelected = function(model) {
         if ($scope.popup.selectedModels.indexOf(model.id) >= 0) {
@@ -311,6 +366,14 @@ angular.module('flowableModeler')
     
     $scope.isCmmnModelSelected = function(model) {
         if ($scope.popup.selectedCmmnModels.indexOf(model.id) >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    $scope.isCmmnModelSelected = function(model) {
+        if ($scope.popup.selectedChoreographyModels.indexOf(model.id) >= 0) {
             return true;
         } else {
             return false;

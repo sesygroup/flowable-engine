@@ -95,7 +95,8 @@
                             {{'APP.ACTION.EDIT-MODELS' | translate}}
                         </button>
                     </div>
-                    <div class="no-results" ng-show="!currentAppDefinition.definition.models.length && !currentAppDefinition.definition.cmmnModels.length">
+                    <div class="no-results" ng-show="!currentAppDefinition.definition.models.length && !currentAppDefinition.definition.cmmnModels.length
+                                                        && !currentAppDefinition.definition.choreographyModels.length">
                         {{'APP.DETAILS.NO-MODELS-SELECTED' | translate}}
                     </div>
                 </div>
@@ -127,6 +128,22 @@
                 
                 <div class="col-xs-12 item-wrapper" ng-show="appBuilder.activeTab == 'cmmn'">
                     <div class="item fadein" ng-repeat="model in currentAppDefinition.definition.cmmnModels">
+                        <div class="item-box" ng-style="{'background-image': 'url(\'' + getModelThumbnailUrl(model.id) + '\')'}">
+                            <div class="actions">
+                                <span class="badge">v{{model.version}}</span>
+                            </div>
+                            <div class="details">
+                                <h3 class="truncate" title="{{model.name}}">
+                                    {{model.name}}
+                                </h3>
+                                <p>{{model.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 item-wrapper" ng-show="appBuilder.activeTab == 'choreography'">
+                    <div class="item fadein" ng-repeat="model in currentAppDefinition.definition.choreographyModels">
                         <div class="item-box" ng-style="{'background-image': 'url(\'' + getModelThumbnailUrl(model.id) + '\')'}">
                             <div class="actions">
                                 <span class="badge">v{{model.version}}</span>

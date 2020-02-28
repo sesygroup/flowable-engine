@@ -69,7 +69,7 @@ angular.module('flowableModeler')
 		  var params = {
 		      filter: $scope.model.activeFilter.id,
 		      sort: $scope.model.activeSort.id,
-		      modelType: 0
+		      modelType: 6
 		  };
 
 		  if ($scope.model.filterText && $scope.model.filterText != '') {
@@ -125,7 +125,7 @@ angular.module('flowableModeler')
 	  $scope.showProcessDetails = function(process) {
 	      if (process) {
 	          $rootScope.editorHistory = [];
-	          $location.path("/processes/" + process.id);
+	          $location.path("/choreographies/" + process.id);
 	      }
 	  };
 
@@ -150,7 +150,8 @@ angular.module('flowableModeler')
             name: '',
             key: '',
             description: '',
-           	modelType: 0
+            // model type 6 = choreography
+           	modelType: 6
        }
     };
 
@@ -256,9 +257,9 @@ angular.module('flowableModeler')
 
           var url;
           if (isIE) {
-              url = FLOWABLE.APP_URL.getImportProcessModelTextUrl();
+              url = FLOWABLE.APP_URL.getImportChoreographyModelTextUrl();
           } else {
-              url = FLOWABLE.APP_URL.getImportProcessModelUrl();
+              url = FLOWABLE.APP_URL.getImportChoreographyModelUrl();
           }
 
           Upload.upload({

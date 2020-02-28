@@ -349,4 +349,10 @@ public interface BpmnXMLConstants {
     public static final String MAP_EXCEPTION_ANDCHILDREN = "includeChildExceptions";
     public static final String MAP_EXCEPTION_ROOTCAUSE = "rootCause";
 
+    // choreography task
+    public static final String ELEMENT_TASK_CHOREOGRAPHY = "choreographyTask";
+    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT = "initiatingPartecipant";
+    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT = "partecipant";
+    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_MESSAGE = "initiatingMessage";
+    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_RETURN_MESSAGE = "returnMessage";
 }

@@ -262,6 +262,44 @@ public class ModelServiceImpl implements ModelService {
             childNode.set("stencil", stencilNode);
             stencilNode.put("id", "CasePlanModel");
             json = editorNode.toString();
+ 
+        } else if (Integer.valueOf(AbstractModel.MODEL_TYPE_CHOREOGRAPHY).equals(model.getModelType())){
+            ObjectNode editorNode = objectMapper.createObjectNode();
+            editorNode.put("id", "canvas");
+            editorNode.put("resourceId", "canvas");
+            ObjectNode stencilSetNode = objectMapper.createObjectNode();
+            stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0_choreography#");
+            editorNode.set("stencilset", stencilSetNode);
+            ObjectNode propertiesNode = objectMapper.createObjectNode();
+            propertiesNode.put("process_id", model.getKey());
+            propertiesNode.put("name", model.getName());
+            if (StringUtils.isNotEmpty(model.getDescription())) {
+                propertiesNode.put("documentation", model.getDescription());
+            }
+            editorNode.set("properties", propertiesNode);
+
+            ArrayNode childShapeArray = objectMapper.createArrayNode();
+            editorNode.set("childShapes", childShapeArray);
+            ObjectNode childNode = objectMapper.createObjectNode();
+            childShapeArray.add(childNode);
+            ObjectNode boundsNode = objectMapper.createObjectNode();
+            childNode.set("bounds", boundsNode);
+            ObjectNode lowerRightNode = objectMapper.createObjectNode();
+            boundsNode.set("lowerRight", lowerRightNode);
+            lowerRightNode.put("x", 130);
+            lowerRightNode.put("y", 193);
+            ObjectNode upperLeftNode = objectMapper.createObjectNode();
+            boundsNode.set("upperLeft", upperLeftNode);
+            upperLeftNode.put("x", 100);
+            upperLeftNode.put("y", 163);
+            childNode.set("childShapes", objectMapper.createArrayNode());
+            childNode.set("dockers", objectMapper.createArrayNode());
+            childNode.set("outgoing", objectMapper.createArrayNode());
+            childNode.put("resourceId", "startEvent1");
+            ObjectNode stencilNode = objectMapper.createObjectNode();
+            childNode.set("stencil", stencilNode);
+            stencilNode.put("id", "StartNoneEvent");
+            json = editorNode.toString();
 
         } else {
             ObjectNode editorNode = objectMapper.createObjectNode();
@@ -679,7 +717,8 @@ public class ModelServiceImpl implements ModelService {
                 throw new InternalServerErrorException("Could not deserialize json model");
             }
 
-            if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN)) {
+            if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN
+            || model.getModelType().intValue() == Model.MODEL_TYPE_CHOREOGRAPHY)) {
 
                 // Thumbnail
                 byte[] thumbnail = modelImageService.generateThumbnailImage(model, jsonNode);

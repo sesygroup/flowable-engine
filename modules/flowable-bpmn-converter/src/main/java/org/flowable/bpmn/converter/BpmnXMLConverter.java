@@ -187,6 +187,9 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
         // Alfresco types
         addConverter(new AlfrescoStartEventXMLConverter());
         addConverter(new AlfrescoUserTaskXMLConverter());
+        
+        // Choreography
+        addConverter(new ChoreographyTaskXMLConverter());
     }
 
     public static void addConverter(BaseBpmnXMLConverter converter) {

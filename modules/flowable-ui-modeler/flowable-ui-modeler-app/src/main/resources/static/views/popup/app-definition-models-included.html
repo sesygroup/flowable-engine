@@ -60,6 +60,28 @@
                     </div>
                 </div>
             </div>
+
+            <div class="item-wrapper clearfix" ng-show="popup.activeTab == 'choreography'">
+                <div class="item fadein" ng-repeat="choreographyModel in popup.choreographyModel.data">
+                    <div class="item-box" ng-style="{'background-image': 'url(\'' + getModelThumbnailUrl(model.id) + '\')'}" ng-click="selectChoreographyModel(model); $event.stopPropagation();">
+                        <span class="badge">v{{choreographyModel.version}}</span>
+                        <div class="btn-group pull-right">
+                            <button type="button" ng-show="isChoreographyModelSelected(model)" class="btn btn-default" title="{{'CHOREOGRAPHY.ACTION.DETAILS' | translate}}">
+                                <i class="glyphicon glyphicon-plus-sign"></i>
+                            </button>
+                        </div>
+                        <div class="details">
+                            <h3 class="truncate" title="{{choreographyModel.name}}">
+                                {{choreographyModel.name}}
+                            </h3>
+                            <div class="basic-details truncate">
+                                <span><i class="glyphicon glyphicon-user"></i> {{choreographyModel.createdBy}}</span> <span title="{{choreographyModel.lastUpdated | dateformat:'LLLL'}}"><i class="glyphicon glyphicon-pencil"></i> {{choreographyModel.lastUpdated | dateformat}}</span>
+                            </div>
+                            <p>{{choreographyModel.description}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
                 <div class="pull-right">
                     <button type="button" class="btn btn-default" ng-click="close()" ng-disabled="popup.loading">
