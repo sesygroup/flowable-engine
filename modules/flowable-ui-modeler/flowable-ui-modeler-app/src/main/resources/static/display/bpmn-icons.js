@@ -380,3 +380,17 @@ function _drawMessageIcon(paper, element)
 	path.transform("T" + (element.x + 6) + "," + (element.y + 6));
 	return path;
 }
+//choreography icon preview
+function _drawChoreographyTaskIcon(paper,startX, startY)
+{
+	var path1 = paper.path("M1.3898010410688164,1.3000890428473102 L21.93774658434809,1.3000890428473102 L21.93774658434809,11.036262192924058 L1.3898010410688164,11.036262192924058 L1.3898010410688164,1.3000890428473102 zM1.3898010410688164,6.168178175366014 L21.93774658434809,6.168178175366014 L21.93774658434809,15.904351325442754 L1.3898010410688164,15.904351325442754 L1.3898010410688164,6.168178175366014 z");
+	path1.attr({
+		"opacity": 1,
+		"stroke": "black"
+ 	});
+
+	var chorTaskIcon = paper.set();
+	chorTaskIcon.push(path1);
+
+	chorTaskIcon.transform("T" + startX + "," + startY);
+}

@@ -595,7 +595,9 @@ public class ModelServiceImpl implements ModelService {
             }
 
             bpmnModel = getBpmnModel(model, formMap, decisionTableMap);
-
+            // choreography, set model type
+            bpmnModel.setModelType(model.getModelType());
+            
         } catch (Exception e) {
             LOGGER.error("Could not generate BPMN 2.0 model for {}", model.getId(), e);
             throw new InternalServerErrorException("Could not generate BPMN 2.0 model");

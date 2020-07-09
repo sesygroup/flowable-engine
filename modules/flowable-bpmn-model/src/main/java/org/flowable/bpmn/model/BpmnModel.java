@@ -52,6 +52,10 @@ public class BpmnModel {
     protected List<String> startEventFormTypes;
     protected int nextFlowIdCounter = 1;
     protected Object eventSupport;
+    // choreography converter
+    protected Integer modelType;
+    protected List<Participant> participants = new ArrayList<>();
+
 
     public Map<String, List<ExtensionAttribute>> getDefinitionsAttributes() {
         return definitionsAttributes;
@@ -596,5 +600,35 @@ public class BpmnModel {
 
     public void setEventSupport(Object eventSupport) {
         this.eventSupport = eventSupport;
+    }
+    
+    //choreography
+    public Integer getModelType() {
+		return modelType;
+	}
+
+	public void setModelType(Integer modelType) {
+		this.modelType = modelType;
+	}
+	
+	public List<Participant> getParticipants() {
+		return participants;
+	}
+
+	public void setParticipants(List<Participant> participants) {
+		this.participants = participants;
+	}
+	
+	public Participant getParticipant(String id) {
+		Participant foundParticipant = null;
+        if (StringUtils.isNotEmpty(id)) {
+            for (Participant participant : participants) {
+                if (id.equals(participant.getId())) {
+                    foundParticipant = participant;
+                    break;
+                }
+            }
+        }
+        return foundParticipant;
     }
 }

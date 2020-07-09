@@ -66,11 +66,10 @@ angular.module('flowableModeler')
             if (data.namespace == 'http://b3mn.org/stencilset/cmmn1.1#') {
                 quickMenuDefinition = ['HumanTask', 'Association'];
                 ignoreForPaletteDefinition = ['CasePlanModel'];
-                
-           // } else if (data.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#'){
 
             } else {
-                quickMenuDefinition = ['UserTask', 'EndNoneEvent', 'ExclusiveGateway', 
+                quickMenuDefinition = ['ChoreographyTask', 'UserTask', 'EndNoneEvent', 'ExclusiveGateway', 
+                                         'InclusiveGateway', 'ParallelGateway', 'EventGateway',
                                          'CatchTimerEvent', 'ThrowNoneEvent', 'TextAnnotation',
                                          'SequenceFlow', 'Association'];
                                          
@@ -146,13 +145,13 @@ angular.module('flowableModeler')
                     stencilItem.customIcon = true;
                     stencilItem.icon = data.stencils[stencilIndex].customIconId;
                 }
-                
+
                 if (!removed) {
                     if (quickMenuDefinition.indexOf(stencilItem.id) >= 0) {
                       quickMenuItems[quickMenuDefinition.indexOf(stencilItem.id)] = stencilItem;
                     }
                 }
-                
+
                 if (stencilItem.id === 'TextAnnotation' || stencilItem.id === 'BoundaryCompensationEvent') {
                   stencilItem.canConnectAssociation = true;
                 }
@@ -164,10 +163,7 @@ angular.module('flowableModeler')
                         stencilItem.canConnect = true;
                       } else if (stencilRole === 'association_end') {
                         stencilItem.canConnectTo = true;
-                      }
-                      
-                 // } else if (data.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography#') {
-                    
+                      }  
                     
                 } else {
                       if (stencilRole === 'sequence_start') {
@@ -244,7 +240,8 @@ angular.module('flowableModeler')
                     var selectedShape = shapes.first();
                     var stencil = selectedShape.getStencil();
                     
-                    if ($rootScope.selectedElementBeforeScrolling && stencil.id().indexOf('BPMNDiagram') !== -1 && stencil.id().indexOf('CMMNDiagram') !== -1) {
+                    if ($rootScope.selectedElementBeforeScrolling && stencil.id().indexOf('BPMNDiagram') !== -1 && stencil.id().indexOf('CMMNDiagram') !== -1
+                        && stencil.id().indexOf('ChoreographyDiagram') !== -1) {
                       // ignore canvas event because of empty selection when scrolling stops
                       return;
                     }

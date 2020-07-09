@@ -120,6 +120,10 @@ FLOWABLE.APP_URL = {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/cmmn-models-for-app-definition';
     },
 
+    getChoreographyModelsForAppDefinitionUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/choreography-models-for-app-definition';
+    },
+
     /* PROCESS INSTANCE URLS */
 
     getProcessInstanceModelJsonUrl: function (modelId) {
@@ -144,6 +148,16 @@ FLOWABLE.APP_URL = {
 
     getImportProcessModelTextUrl: function () {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/import-process-model/text';
+    },
+
+    /* CHOREOGRAPHY MODEL URLS */
+
+    getImportChoreographyModelUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/import-choreography-model';
+    },
+
+    getImportChoreographyModelTextUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/import-choreography-model/text';
     },
 
     /* DECISION TABLE URLS */

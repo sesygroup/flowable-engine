@@ -13581,6 +13581,12 @@ ORYX.Core.Shape = {
 												label.text(prop);
 											}
 											break;
+										case ORYX.CONFIG.TYPE_MULTIPLECOMPLEX:
+											var label = this._labels.get(refId);
+											if (label) {
+												label.text(prop);
+											}
+											break;
 										case ORYX.CONFIG.TYPE_FLOAT:
 											if(property.fillOpacity()) {
 												svgElem.setAttributeNS(null, 'fill-opacity', prop);
@@ -19487,7 +19493,7 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
 				evtCoord.y		*= trans.d;
 
 				var diff = labels.collect(function(label){ 
-							var center 	= this.getCenterPosition( label.node ); 
+							var center 	= this.getCenterPosition( label.node, shape); 
 							var len 	= Math.sqrt( Math.pow(center.x - evtCoord.x, 2) + Math.pow(center.y - evtCoord.y, 2));
 							return {diff: len, label: label}; 
 						}.bind(this));
@@ -19577,7 +19583,8 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
 		var searchShape = shape;
 		while (hasParent)
 		{
-		    if (searchShape.getParentShape().getStencil().idWithoutNs() === 'BPMNDiagram' || searchShape.getParentShape().getStencil().idWithoutNs() === 'CMMNDiagram') 
+			if (searchShape.getParentShape().getStencil().idWithoutNs() === 'BPMNDiagram' || searchShape.getParentShape().getStencil().idWithoutNs() === 'CMMNDiagram'
+				|| searchShape.getParentShape().getStencil().idWithoutNs() === 'ChoreographyDiagram') 
 			{
 				hasParent = false;
 			}

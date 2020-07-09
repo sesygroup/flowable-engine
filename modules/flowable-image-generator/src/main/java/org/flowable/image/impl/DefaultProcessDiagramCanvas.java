@@ -136,6 +136,9 @@ public class DefaultProcessDiagramCanvas {
     protected static BufferedImage MESSAGE_CATCH_IMAGE;
     protected static BufferedImage SIGNAL_CATCH_IMAGE;
     protected static BufferedImage SIGNAL_THROW_IMAGE;
+    
+    //choreography
+    protected static BufferedImage CHOR_TASK_IMAGE;
 
     protected int canvasWidth = -1;
     protected int canvasHeight = -1;
@@ -247,6 +250,9 @@ public class DefaultProcessDiagramCanvas {
             MESSAGE_CATCH_IMAGE = ImageIO.read(ReflectUtil.getResource("org/flowable/icons/message.png", customClassLoader));
             SIGNAL_THROW_IMAGE = ImageIO.read(ReflectUtil.getResource("org/flowable/icons/signal-throw.png", customClassLoader));
             SIGNAL_CATCH_IMAGE = ImageIO.read(ReflectUtil.getResource("org/flowable/icons/signal.png", customClassLoader));
+            
+            //choreography
+            CHOR_TASK_IMAGE = ImageIO.read(ReflectUtil.getResource("org/flowable/icons/choreography.png", customClassLoader));
             
         } catch (IOException e) {
             LOGGER.warn("Could not load image for process diagram creation: {}", e.getMessage());
@@ -1262,6 +1268,11 @@ public class DefaultProcessDiagramCanvas {
             g.setFont(originalFont);
             g.setPaint(originalPaint);
         }
+    }
+    
+    //choreography
+    public void drawChoreography(String name, GraphicInfo graphicInfo, double scaleFactor) {
+        drawTask(CHOR_TASK_IMAGE, name, graphicInfo, scaleFactor);
     }
 
     /**

@@ -244,7 +244,7 @@ public class FlowableModelQueryService {
                 XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
                 InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), "UTF-8");
                 XMLStreamReader xtr = xif.createXMLStreamReader(xmlIn);
-                BpmnModel bpmnModel = bpmnXmlConverter.convertToBpmnModel(xtr);
+                BpmnModel bpmnModel = bpmnXmlConverter.convertToChoreographyBpmnModel(xtr);
                 if (CollectionUtils.isEmpty(bpmnModel.getProcesses())) {
                     throw new BadRequestException("No process found in definition " + fileName);
                 }

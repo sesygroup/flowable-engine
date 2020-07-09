@@ -23,6 +23,7 @@ import org.flowable.bpmn.constants.BpmnXMLConstants;
 import org.flowable.bpmn.model.Artifact;
 import org.flowable.bpmn.model.Association;
 import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.ChoreographyTask;
 import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.GraphicInfo;
 import org.flowable.bpmn.model.MessageFlow;
@@ -190,6 +191,38 @@ public class BPMNDIExport implements BpmnXMLConstants {
         xtw.writeEndElement();
 
         xtw.writeEndElement();
+        // add partecipants for choreographyTask
+        if (flowElement instanceof ChoreographyTask) {
+        	ChoreographyTask chor = (ChoreographyTask) flowElement;
+            if(chor.getInitiatingPartecipant() != null) {
+            	xtw.writeStartElement(BPMNDI_PREFIX, ELEMENT_DI_SHAPE, BPMNDI_NAMESPACE);
+            	xtw.writeAttribute(ATTRIBUTE_DI_BPMNELEMENT, chor.getInitiatingPartecipant().replace(" ", "_"));
+                xtw.writeAttribute(ATTRIBUTE_ID, "BPMNShape_" + chor.getInitiatingPartecipant().replace(" ", "_"));
+                xtw.writeAttribute(ATTRIBUTE_CHOREOGRAPHY_ACTIVITY_SHAPE, "BPMNShape_" + elementId);
+                xtw.writeAttribute(ATTRIBUTE_PARTECIPANT_BAND_KIND, TOP_INITIATING);
+                xtw.writeStartElement(OMGDC_PREFIX, ELEMENT_DI_BOUNDS, OMGDC_NAMESPACE);
+                xtw.writeAttribute(ATTRIBUTE_DI_HEIGHT, String.valueOf(graphicInfo.getHeight()));
+                xtw.writeAttribute(ATTRIBUTE_DI_WIDTH, String.valueOf(graphicInfo.getWidth()));
+                xtw.writeAttribute(ATTRIBUTE_DI_X, String.valueOf(graphicInfo.getX()));
+                xtw.writeAttribute(ATTRIBUTE_DI_Y, String.valueOf(graphicInfo.getY()));
+                xtw.writeEndElement();
+                xtw.writeEndElement();
+            }
+            if(chor.getPartecipant() != null) {
+            	xtw.writeStartElement(BPMNDI_PREFIX, ELEMENT_DI_SHAPE, BPMNDI_NAMESPACE);
+            	xtw.writeAttribute(ATTRIBUTE_DI_BPMNELEMENT, chor.getPartecipant().replace(" ", "_"));
+                xtw.writeAttribute(ATTRIBUTE_ID, "BPMNShape_" + chor.getPartecipant().replace(" ", "_"));
+                xtw.writeAttribute(ATTRIBUTE_CHOREOGRAPHY_ACTIVITY_SHAPE, "BPMNShape_" + elementId);
+                xtw.writeAttribute(ATTRIBUTE_PARTECIPANT_BAND_KIND, BOTTOM_NON_INITIATING);
+                xtw.writeStartElement(OMGDC_PREFIX, ELEMENT_DI_BOUNDS, OMGDC_NAMESPACE);
+                xtw.writeAttribute(ATTRIBUTE_DI_HEIGHT, String.valueOf(graphicInfo.getHeight()));
+                xtw.writeAttribute(ATTRIBUTE_DI_WIDTH, String.valueOf(graphicInfo.getWidth()));
+                xtw.writeAttribute(ATTRIBUTE_DI_X, String.valueOf(graphicInfo.getX()));
+                xtw.writeAttribute(ATTRIBUTE_DI_Y, String.valueOf(graphicInfo.getY()+60));
+                xtw.writeEndElement();
+                xtw.writeEndElement();
+            }
+        }
     }
     
     protected static void createBpmnEdge(BpmnModel model, String elementId, XMLStreamWriter xtw) throws Exception {

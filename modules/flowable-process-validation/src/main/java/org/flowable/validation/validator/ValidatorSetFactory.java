@@ -15,6 +15,7 @@ package org.flowable.validation.validator;
 import org.flowable.validation.validator.impl.AssociationValidator;
 import org.flowable.validation.validator.impl.BoundaryEventValidator;
 import org.flowable.validation.validator.impl.BpmnModelValidator;
+import org.flowable.validation.validator.impl.ChoreographyTaskValidator;
 import org.flowable.validation.validator.impl.DataObjectValidator;
 import org.flowable.validation.validator.impl.DiagramInterchangeInfoValidator;
 import org.flowable.validation.validator.impl.EndEventValidator;
@@ -77,6 +78,9 @@ public class ValidatorSetFactory {
         validatorSet.addValidator(new FlowableEventListenerValidator());
 
         validatorSet.addValidator(new DiagramInterchangeInfoValidator());
+        
+        //added validator for choreography task
+        validatorSet.addValidator(new ChoreographyTaskValidator());
 
         return validatorSet;
     }

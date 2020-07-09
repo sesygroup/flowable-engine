@@ -56,6 +56,9 @@ public class ChoreographyTaskJsonConverter extends BaseBpmnJsonConverter{
 			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_INITIATING_PARTECIPANT_REF, elementNode))) {
 				 choreographyTask.setInitiatingPartecipant(getPropertyValueAsString(PROPERTY_INITIATING_PARTECIPANT_REF, elementNode));
 		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_PERTECIPANT_REF, elementNode))) {
+				 choreographyTask.setPartecipant(getPropertyValueAsString(PROPERTY_PERTECIPANT_REF, elementNode));
+		     }
 			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_INITIATING_MESSAGE, elementNode))) {
 				 choreographyTask.setInitiatingMessage(getPropertyValueAsString(PROPERTY_INITIATING_MESSAGE, elementNode));
 		     }

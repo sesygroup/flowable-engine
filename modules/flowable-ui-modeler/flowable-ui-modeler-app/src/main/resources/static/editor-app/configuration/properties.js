@@ -162,4 +162,12 @@ FLOWABLE.PROPERTY_CONFIG =
         "readModeTemplateUrl": "editor-app/configuration/properties/trigger-mode-read-template.html",
         "writeModeTemplateUrl": "editor-app/configuration/properties/trigger-mode-write-template.html"
     },
+    "oryx-initiatingpartecipantref-multiplecomplex": {
+        "readModeTemplateUrl": "editor-app/configuration/properties/initiating-partecipant-display-template.html",
+        "writeModeTemplateUrl": "editor-app/configuration/properties/initiating-partecipant-write-template.html"
+    },
+    "oryx-partecipantref-multiplecomplex": {
+        "readModeTemplateUrl": "editor-app/configuration/properties/partecipant-display-template.html",
+        "writeModeTemplateUrl": "editor-app/configuration/properties/partecipant-write-template.html"
+    },
 };

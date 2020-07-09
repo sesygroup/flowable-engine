@@ -65,7 +65,7 @@ angular.module('flowableModeler')
                 var amdDefine = window.define;
                 window.define = undefined;
                 ResourceService.loadFromHtml(viewerUrl, function(){
-                    // Restore AMD's define method again
+                     //Restore AMD's define method again
                     window.define = amdDefine;
                 });
               });

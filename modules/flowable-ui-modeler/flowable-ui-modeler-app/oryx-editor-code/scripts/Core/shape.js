@@ -324,6 +324,12 @@ ORYX.Core.Shape = {
 												label.text(prop);
 											}
 											break;
+										case ORYX.CONFIG.TYPE_MULTIPLECOMPLEX:
+											var label = this._labels.get(refId);
+											if (label) {
+												label.text(prop);
+											}
+											break;
 										case ORYX.CONFIG.TYPE_FLOAT:
 											if(property.fillOpacity()) {
 												svgElem.setAttributeNS(null, 'fill-opacity', prop);

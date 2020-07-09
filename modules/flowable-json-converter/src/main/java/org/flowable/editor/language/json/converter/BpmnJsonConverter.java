@@ -201,6 +201,9 @@ public class BpmnJsonConverter implements EditorJsonConstants, StencilConstants,
         DI_GATEWAY.add(STENCIL_GATEWAY_EXCLUSIVE);
         DI_GATEWAY.add(STENCIL_GATEWAY_INCLUSIVE);
         DI_GATEWAY.add(STENCIL_GATEWAY_PARALLEL);
+        
+        //choreography
+        DI_RECTANGLES.add(STENCIL_TASK_CHOREOGRAPHY);
     }
 
     protected double lineWidth = 0.05d;
@@ -237,19 +240,30 @@ public class BpmnJsonConverter implements EditorJsonConstants, StencilConstants,
         modelNode.put("resourceId", "canvas");
 
         ObjectNode stencilNode = objectMapper.createObjectNode();
-        stencilNode.put("id", "BPMNDiagram");
+        // choreography
+        if(model.getModelType() == 6) {
+        	stencilNode.put("id", "ChoreographyDiagram");
+        } else {
+        	stencilNode.put("id", "BPMNDiagram");
+        }
         modelNode.set("stencil", stencilNode);
 
         ObjectNode stencilsetNode = objectMapper.createObjectNode();
-        stencilsetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-        stencilsetNode.put("url", "../editor/stencilsets/bpmn2.0/bpmn2.0.json");
+        //choreography
+        if(model.getModelType() == 6) {
+        	stencilsetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0_choreography#");
+        	stencilsetNode.put("url", "../editor/stencilsets/bpmn2.0/bpmn2.0_choreography.json");
+        } else {
+        	stencilsetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+            stencilsetNode.put("url", "../editor/stencilsets/bpmn2.0/bpmn2.0.json");
+        }
         modelNode.set("stencilset", stencilsetNode);
 
         ArrayNode shapesArrayNode = objectMapper.createArrayNode();
 
         Process mainProcess = null;
         if (model.getPools().size() > 0) {
-            mainProcess = model.getProcess(model.getPools().get(0).getId());
+        	mainProcess = model.getMainProcess();
         } else {
             mainProcess = model.getMainProcess();
         }
@@ -289,12 +303,16 @@ public class BpmnJsonConverter implements EditorJsonConstants, StencilConstants,
         
         propertiesNode.put(PROPERTY_IS_EAGER_EXECUTION_FETCHING, Boolean.valueOf(mainProcess.isEnableEagerExecutionTreeFetching()));
 
-        BpmnJsonConverterUtil.convertMessagesToJson(model.getMessages(), propertiesNode);
-
+        //choreography skip this
+        if(model.getModelType() != 6) {
+        	BpmnJsonConverterUtil.convertMessagesToJson(model.getMessages(), propertiesNode);
+        }
         BpmnJsonConverterUtil.convertListenersToJson(mainProcess.getExecutionListeners(), true, propertiesNode);
         BpmnJsonConverterUtil.convertEventListenersToJson(mainProcess.getEventListeners(), propertiesNode);
         BpmnJsonConverterUtil.convertSignalDefinitionsToJson(model, propertiesNode);
-        BpmnJsonConverterUtil.convertMessagesToJson(model, propertiesNode);
+        if(model.getModelType() != 6) {
+        	BpmnJsonConverterUtil.convertMessagesToJson(model, propertiesNode);
+        }
         BpmnJsonConverterUtil.convertEscalationDefinitionsToJson(model, propertiesNode);
 
         if (CollectionUtils.isNotEmpty(mainProcess.getDataObjects())) {
@@ -407,7 +425,10 @@ public class BpmnJsonConverter implements EditorJsonConstants, StencilConstants,
 
         } else {
             processFlowElements(model.getMainProcess(), model, shapesArrayNode, formKeyMap, decisionTableKeyMap, 0.0, 0.0);
-            processMessageFlows(model, shapesArrayNode);
+            if(model.getModelType() != 6) {
+            	processMessageFlows(model, shapesArrayNode);
+            }
+            
         }
 
         modelNode.set(EDITOR_CHILD_SHAPES, shapesArrayNode);

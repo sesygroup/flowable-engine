@@ -58,7 +58,6 @@ public interface StencilConstants {
     final String STENCIL_TASK_HTTP = "HttpTask";
     final String STENCIL_TASK_SHELL = "ShellTask";
     final String STENCIL_TASK_DECISION = "DecisionTask";
-    final String STENCIL_TASK_CHOREOGRAPHY = "ChoreographyTask";
 
     final String STENCIL_GATEWAY_EXCLUSIVE = "ExclusiveGateway";
     final String STENCIL_GATEWAY_PARALLEL = "ParallelGateway";
@@ -324,6 +323,8 @@ public interface StencilConstants {
 
     final String PROPERTY_FOR_COMPENSATION = "isforcompensation";
     
+    //choreography
+    final String STENCIL_TASK_CHOREOGRAPHY = "ChoreographyTask";
     final String PROPERTY_INITIATING_PARTECIPANT_REF = "initiatingpartecipantref";
     final String PROPERTY_PERTECIPANT_REF = "partecipantref";
     final String PROPERTY_INITIATING_MESSAGE = "initiatingmessage";

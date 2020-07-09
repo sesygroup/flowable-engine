@@ -31,6 +31,7 @@ import org.flowable.bpmn.model.BoundaryEvent;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.BusinessRuleTask;
 import org.flowable.bpmn.model.CallActivity;
+import org.flowable.bpmn.model.ChoreographyTask;
 import org.flowable.bpmn.model.CompensateEventDefinition;
 import org.flowable.bpmn.model.ConditionalEventDefinition;
 import org.flowable.bpmn.model.EndEvent;
@@ -478,6 +479,16 @@ public class DefaultProcessDiagramGenerator implements ProcessDiagramGenerator {
 
                 AssociationDirection associationDirection = association.getAssociationDirection();
                 processDiagramCanvas.drawAssociation(xPoints, yPoints, associationDirection, false, scaleFactor);
+            }
+        });
+        
+        // choreography task
+        activityDrawInstructions.put(ChoreographyTask.class, new ActivityDrawInstruction() {
+
+            @Override
+            public void draw(DefaultProcessDiagramCanvas processDiagramCanvas, BpmnModel bpmnModel, FlowNode flowNode) {
+                GraphicInfo graphicInfo = bpmnModel.getGraphicInfo(flowNode.getId());
+                processDiagramCanvas.drawChoreography(flowNode.getName(), graphicInfo, scaleFactor);
             }
         });
     }

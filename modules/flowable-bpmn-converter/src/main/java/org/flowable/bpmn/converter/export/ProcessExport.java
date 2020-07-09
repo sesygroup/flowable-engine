@@ -21,7 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.constants.BpmnXMLConstants;
 import org.flowable.bpmn.converter.util.BpmnXMLUtil;
 import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.ChoreographyTask;
 import org.flowable.bpmn.model.ExtensionAttribute;
+import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.Process;
 
 public class ProcessExport implements BpmnXMLConstants {
@@ -39,14 +41,39 @@ public class ProcessExport implements BpmnXMLConstants {
     @SuppressWarnings("unchecked")
     public static void writeProcess(Process process, BpmnModel model, XMLStreamWriter xtw) throws Exception {
         // start process element
-        xtw.writeStartElement(ELEMENT_PROCESS);
+    	if( model.getModelType() != null && model.getModelType() == 6) {
+    		// init choreography 
+    		for (FlowElement flowElement : process.getFlowElements()) {
+    			if(flowElement instanceof ChoreographyTask) {
+    				ChoreographyTask chor = (ChoreographyTask) flowElement;
+    				if(chor.getInitiatingMessage() != null) {
+    					xtw.writeStartElement(ELEMENT_MESSAGE);
+    					xtw.writeAttribute(ATTRIBUTE_ID, "initMessage" + chor.getId());
+    					xtw.writeAttribute(ATTRIBUTE_NAME, chor.getInitiatingMessage());
+    					xtw.writeEndElement();
+    				}
+    				if(chor.getReturnMessage() != null) {
+    					xtw.writeStartElement(ELEMENT_MESSAGE);
+    					xtw.writeAttribute(ATTRIBUTE_ID, "retMessage" + chor.getId());
+    					xtw.writeAttribute(ATTRIBUTE_NAME, chor.getReturnMessage());
+    					xtw.writeEndElement();
+    				}
+    			}
+			}
+    		xtw.writeStartElement(ELEMENT_CHOREOGRAPHY);
+    	} else {
+    		xtw.writeStartElement(ELEMENT_PROCESS);
+    	}
+    	
         xtw.writeAttribute(ATTRIBUTE_ID, process.getId());
 
         if (StringUtils.isNotEmpty(process.getName())) {
             xtw.writeAttribute(ATTRIBUTE_NAME, process.getName());
         }
 
-        xtw.writeAttribute(ATTRIBUTE_PROCESS_EXECUTABLE, Boolean.toString(process.isExecutable()));
+        if( model.getModelType() != null && model.getModelType() != 6) {
+        	xtw.writeAttribute(ATTRIBUTE_PROCESS_EXECUTABLE, Boolean.toString(process.isExecutable()));
+        }
 
         if (!process.getCandidateStarterUsers().isEmpty()) {
             xtw.writeAttribute(FLOWABLE_EXTENSIONS_PREFIX, FLOWABLE_EXTENSIONS_NAMESPACE, ATTRIBUTE_PROCESS_CANDIDATE_USERS, BpmnXMLUtil.convertToDelimitedString(process.getCandidateStarterUsers()));

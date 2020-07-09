@@ -350,9 +350,16 @@ public interface BpmnXMLConstants {
     public static final String MAP_EXCEPTION_ROOTCAUSE = "rootCause";
 
     // choreography task
+    public static final String ELEMENT_CHOREOGRAPHY = "choreography";
     public static final String ELEMENT_TASK_CHOREOGRAPHY = "choreographyTask";
-    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT = "initiatingPartecipant";
-    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT = "partecipant";
+    public static final String ELEMENT_PARTECIPANT = "participant"; 
+    public static final String ELEMENT_MESSAGEFLOW_REF = "messageFlowRef";
+    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT = "initiatingParticipantRef";
+    public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT = "participantRef";
     public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_MESSAGE = "initiatingMessage";
     public static final String ATTRIBUTE_TASK_CHOREOGRAPHY_RETURN_MESSAGE = "returnMessage";
+    public static final String ATTRIBUTE_CHOREOGRAPHY_ACTIVITY_SHAPE = "choreographyActivityShape";
+    public static final String ATTRIBUTE_PARTECIPANT_BAND_KIND = "participantBandKind";
+    public static final String TOP_INITIATING = "top_initiating";
+    public static final String BOTTOM_NON_INITIATING = "bottom_non_initiating";
 }

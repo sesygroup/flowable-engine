@@ -864,3 +864,11 @@ function _determineCustomFillColor(element, defaultColor) {
 
     return defaultColor;
 }
+
+//choreography preview
+function _drawChoreographyTask(element)
+{
+	_drawTask(element);
+	_drawChoreographyTaskIcon(paper, element.x + 4, element.y + 4);
+	_addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
+}

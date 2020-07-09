@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.constants.BpmnXMLConstants;
 import org.flowable.bpmn.converter.util.BpmnXMLUtil;
 import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.Participant;
 import org.flowable.bpmn.model.Pool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +33,19 @@ public class ParticipantParser implements BpmnXMLConstants {
     public void parse(XMLStreamReader xtr, BpmnModel model) throws Exception {
 
         if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_ID))) {
-            Pool pool = new Pool();
-            pool.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
-            pool.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
-            pool.setProcessRef(xtr.getAttributeValue(null, ATTRIBUTE_PROCESS_REF));
-            BpmnXMLUtil.parseChildElements(ELEMENT_PARTICIPANT, pool, xtr, model);
-            model.getPools().add(pool);
+        	if(model.getModelType() == 6) {
+        		Participant participant = new Participant();
+        		participant.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+        		participant.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
+        		model.getParticipants().add(participant);
+        	} else {
+        		Pool pool = new Pool();
+                pool.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+                pool.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
+                pool.setProcessRef(xtr.getAttributeValue(null, ATTRIBUTE_PROCESS_REF));
+                BpmnXMLUtil.parseChildElements(ELEMENT_PARTICIPANT, pool, xtr, model);
+                model.getPools().add(pool);
+        	}
         }
     }
 }

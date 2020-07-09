@@ -130,5 +130,8 @@ public interface Problems {
     String DI_INVALID_REFERENCE = "flowable-di-invalid-reference";
     String DI_DOES_NOT_REFERENCE_FLOWNODE = "flowable-di-does-not-reference-flownode";
     String DI_DOES_NOT_REFERENCE_SEQ_FLOW = "flowable-di-does-not-reference-seq-flow";
+    
+    //new error for choreography task, invalid initiating partecipant
+    String INVALID_INIT_PART = "flowable-chor-task-invalid-init-part";
 
 }
