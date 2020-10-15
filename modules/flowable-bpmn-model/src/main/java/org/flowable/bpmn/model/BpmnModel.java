@@ -31,7 +31,7 @@ public class BpmnModel {
     protected Map<String, List<ExtensionAttribute>> definitionsAttributes = new LinkedHashMap<>();
     protected List<Process> processes = new ArrayList<>();
     protected Map<String, GraphicInfo> locationMap = new LinkedHashMap<>();
-    protected Map<String, GraphicInfo> labelLocationMap = new LinkedHashMap<>();
+	protected Map<String, GraphicInfo> labelLocationMap = new LinkedHashMap<>();
     protected Map<String, List<GraphicInfo>> flowLocationMap = new LinkedHashMap<>();
     protected List<Signal> signals = new ArrayList<>();
     protected Map<String, MessageFlow> messageFlowMap = new LinkedHashMap<>();
@@ -631,4 +631,12 @@ public class BpmnModel {
         }
         return foundParticipant;
     }
+	
+	public void setLocationMap(Map<String, GraphicInfo> locationMap) {
+		this.locationMap = locationMap;
+	}
+
+	public void setFlowLocationMap(Map<String, List<GraphicInfo>> flowLocationMap) {
+		this.flowLocationMap = flowLocationMap;
+	}
 }

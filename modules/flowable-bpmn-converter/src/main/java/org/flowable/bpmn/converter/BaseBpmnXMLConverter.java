@@ -192,11 +192,35 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
                         writeDefaultAttribute(ATTRIBUTE_DEFAULT, gateway.getDefaultFlow(), xtw);
                     }
                 }
+                if(gateway.getIncomingFlows() != null && gateway.getOutgoingFlows() != null) {
+                	if(gateway.getIncomingFlows().size() > gateway.getOutgoingFlows().size()) {
+                		writeDefaultAttribute(ATTRIBUTE_GATEWAY_DIRECTION, GATEWAY_CONVERGING, xtw);
+                	} else {
+                		writeDefaultAttribute(ATTRIBUTE_GATEWAY_DIRECTION, GATEWAY_DIVERGING, xtw);
+                	}
+                }
             }
         }
 
         writeAdditionalAttributes(baseElement, model, xtw);
-
+       
+        // -- choreography - add outcoming and incoming to any element, solving problems with projections --
+        for (FlowElement flowElement : model.getProcesses().get(0).getFlowElements()) {
+        	if (flowElement instanceof SequenceFlow) {
+        		SequenceFlow sequenceToAdd = (SequenceFlow) flowElement;
+        		if(sequenceToAdd.getSourceRef().equals(baseElement.getId())) {
+        			xtw.writeStartElement(ELEMENT_OUTGOING);
+        			xtw.writeCharacters(sequenceToAdd.getId());
+        			xtw.writeEndElement();		
+        		}
+        		if(sequenceToAdd.getTargetRef().equals(baseElement.getId())) {
+        			xtw.writeStartElement(ELEMENT_INCOMING);
+        			xtw.writeCharacters(sequenceToAdd.getId());
+        			xtw.writeEndElement();		
+        		}
+        	}
+		}
+        
         if (baseElement instanceof FlowElement) {
             final FlowElement flowElement = (FlowElement) baseElement;
             if (StringUtils.isNotEmpty(flowElement.getDocumentation())) {

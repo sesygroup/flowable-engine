@@ -14,8 +14,68 @@
 'use strict';
 
 angular.module('flowableModeler')
-    .controller('StencilController', ['$rootScope', '$scope', '$http', '$modal', '$timeout', '$window', 'editorManager',
-                                      function ($rootScope, $scope, $http, $modal, $timeout, $window, editorManager) {
+    .controller('StencilController', ['$rootScope', '$scope', '$http', '$modal', '$timeout', '$window', 'editorManager', '$location',
+                                      function ($rootScope, $scope, $http, $modal, $timeout, $window, editorManager, $location) {
+
+        $scope.model = {
+            filters: [
+                {id: 'choreographies', labelKey: 'CHOREOGRAPHIES'}
+            ],
+
+            sorts: [
+                {id: 'modifiedDesc', labelKey: 'MODIFIED-DESC'},
+                {id: 'modifiedAsc', labelKey: 'MODIFIED-ASC'},
+                {id: 'nameAsc', labelKey: 'NAME-ASC'},
+                {id: 'nameDesc', labelKey: 'NAME-DESC'}
+            ]
+        };
+
+              // get latest thumbnails
+        $scope.imageVersion = Date.now();
+
+        $scope.showProcessDetails = function(process) {
+          if (process) {
+              $rootScope.editorHistory = [];
+              $location.path("/choreographies/" + process.id);
+          }
+        };
+  
+        $scope.editProcessDetails = function(process) {
+          if (process) {
+              $rootScope.editorHistory = [];
+                  $location.path("/editor/" + process.id);
+          }
+        };
+
+        $scope.loadProjections = function() {
+          $scope.model.loading = true;
+
+          var params = {
+              filter: $rootScope.modelFilter.filter.id,
+              sort: $rootScope.modelFilter.sort.id,
+              modelType: 7,
+              modelRef: editorManager.getModelId()
+          };
+
+          $http({method: 'GET', url: FLOWABLE.APP_URL.getModelsUrl(), params: params}).
+            success(function(data, status, headers, config) {
+              $scope.model.processes = data;
+              $scope.model.loading = false;
+              }).
+              error(function(data, status, headers, config) {
+                console.log('Something went wrong: ' + data);
+                $scope.model.loading = false;
+              });
+        };
+
+        $scope.show = function() {
+          var data = editorManager.getStencilData();
+          if(data != null && data.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography'){
+            return true;
+          } else {
+            return false;
+          }
+        }
 
         // Property window toggle state
         $scope.propertyWindowState = {'collapsed': false};
@@ -67,15 +127,24 @@ angular.module('flowableModeler')
                 quickMenuDefinition = ['HumanTask', 'Association'];
                 ignoreForPaletteDefinition = ['CasePlanModel'];
 
-            } else {
+            } else if(data.namespace == 'http://b3mn.org/stencilset/bpmn2.0_choreography'){
+                //load projections
+                $scope.loadProjections();
+
                 quickMenuDefinition = ['ChoreographyTask', 'UserTask', 'EndNoneEvent', 'ExclusiveGateway', 
                                          'InclusiveGateway', 'ParallelGateway', 'EventGateway',
                                          'CatchTimerEvent', 'ThrowNoneEvent', 'TextAnnotation',
                                          'SequenceFlow', 'Association'];
                                          
                 ignoreForPaletteDefinition = ['SequenceFlow', 'MessageFlow', 'Association', 'DataAssociation', 'DataStore', 'SendTask'];
+            } else {
+                quickMenuDefinition = ['UserTask', 'EndNoneEvent', 'ExclusiveGateway', 
+                                         'CatchTimerEvent', 'ThrowNoneEvent', 'TextAnnotation',
+                                         'SequenceFlow', 'Association'];
+                                         
+                ignoreForPaletteDefinition = ['SequenceFlow', 'MessageFlow', 'Association', 'DataAssociation', 'DataStore', 'SendTask'];
             }
-             
+            
             var quickMenuItems = [];
               
             var morphRoles = [];

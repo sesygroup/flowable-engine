@@ -20,6 +20,8 @@
         <result property="modelId" column="model_id" jdbcType="VARCHAR" />
         <result property="removalDate" column="removal_date" jdbcType="TIMESTAMP" />
         <result property="tenantId" column="tenant_id" jdbcType="VARCHAR" />
+        <result property="modelRef" column="model_ref" jdbcType="VARCHAR" />
+        <result property="participant" column="model_ref" jdbcType="VARCHAR" />
     </resultMap>
 
     <insert id="insertModelHistory" parameterType="org.flowable.ui.modeler.domain.ModelHistory">
@@ -38,7 +40,9 @@
             model_type,
             model_id,
             removal_date,
-            tenant_id) 
+            tenant_id,
+            model_ref,
+            participant) 
          values (
              #{id, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
@@ -54,7 +58,9 @@
             #{modelType, jdbcType=INTEGER},
             #{modelId, jdbcType=VARCHAR},
             #{removalDate, jdbcType=TIMESTAMP},
-            #{tenantId, jdbcType=VARCHAR}
+            #{tenantId, jdbcType=VARCHAR},
+            #{model_ref, jdbcType=VARCHAR},
+            #{participant, jdbcType=VARCHAR}
           )
     </insert>
     
@@ -73,7 +79,9 @@
             model_editor_json = #{modelEditorJson, jdbcType=VARCHAR},
             model_id = #{modelId, jdbcType=VARCHAR},
             removal_date = #{removalDate, jdbcType=TIMESTAMP},
-            tenant_id = #{tenantId, jdbcType=VARCHAR}
+            tenant_id = #{tenantId, jdbcType=VARCHAR},
+            model_ref = #{model_ref, jdbcType=VARCHAR},
+            participant = #{participant, jdbcType=VARCHAR}
         </set>
         where id = #{id, jdbcType=VARCHAR}
     </update>

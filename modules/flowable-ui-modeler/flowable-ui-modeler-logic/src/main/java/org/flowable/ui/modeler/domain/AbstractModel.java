@@ -21,7 +21,9 @@ public class AbstractModel {
     public static final int MODEL_TYPE_APP = 3;
     public static final int MODEL_TYPE_DECISION_TABLE = 4;
     public static final int MODEL_TYPE_CMMN = 5;
+    // choreography
     public static final int MODEL_TYPE_CHOREOGRAPHY = 6;
+    public static final int MODEL_TYPE_PROJECTION = 7;
 
     protected String id;
     protected String name;
@@ -36,8 +38,11 @@ public class AbstractModel {
     protected String comment;
     protected Integer modelType;
     protected String tenantId;
+    // choreography 
+    protected String modelRef;
+    protected String participant;
 
-    public AbstractModel() {
+	public AbstractModel() {
         this.created = new Date();
     }
 
@@ -145,4 +150,19 @@ public class AbstractModel {
         this.tenantId = tenantId;
     }
     
+    public String getModelRef() {
+		return modelRef;
+	}
+
+	public void setModelRef(String modelRef) {
+		this.modelRef = modelRef;
+	}
+	
+	public String getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(String participant) {
+		this.participant = participant;
+	}
 }

@@ -24,6 +24,9 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
 		ChoreographyTask choreographyTask = new ChoreographyTask();
 		BpmnXMLUtil.addXMLLocation(choreographyTask, xtr);
 		String initiatingId = (xtr.getAttributeValue(null, ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT));
+		if(initiatingId != null) {
+			initiatingId = initiatingId.replace("_0:", "");
+		}
 		while (xtr.hasNext()) {
             try {
             	xtr.next();
@@ -41,6 +44,7 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
             if(ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT.equals(xtr.getLocalName())) {
             	String participantImport = xtr.getElementText();
             	if(participantImport != null) {
+            		participantImport = participantImport.replace("_0:", "");
             		for (Participant participant : model.getParticipants()) {
             			if(participantImport.equals(participant.getId())) {
             				if(initiatingId != null && initiatingId.equals(participant.getId())) {
@@ -54,6 +58,9 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
             }
             if(ELEMENT_MESSAGEFLOW_REF.equals(xtr.getLocalName())) {
             	String messageFlowImport = xtr.getElementText();
+            	if(messageFlowImport != null) {
+            		messageFlowImport = messageFlowImport.replace("_0:", "");
+            	}
             	if(model.getMessageFlows() != null && !model.getMessageFlows().isEmpty()) {
             		for (MessageFlow messageFlow : model.getMessageFlows().values()) {
     					if(messageFlow != null && messageFlow.getId().equals(messageFlowImport)) {
@@ -70,11 +77,6 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
             	}
             }
 		}
-		
-//		choreographyTask.setPartecipant(xtr.getAttributeValue(null, ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT));
-//		choreographyTask.setInitiatingMessage(xtr.getAttributeValue(null, ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_MESSAGE));
-//		choreographyTask.setReturnMessage(xtr.getAttributeValue(null, ATTRIBUTE_TASK_CHOREOGRAPHY_RETURN_MESSAGE));
-		
 		return choreographyTask;
 	}
 
@@ -87,7 +89,7 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
 	protected void writeAdditionalAttributes(BaseElement element, BpmnModel model, XMLStreamWriter xtw)
 			throws Exception {
 		ChoreographyTask choreographyTask = (ChoreographyTask) element;
-		writeDefaultAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT,choreographyTask.getInitiatingPartecipant() ,xtw);
+		writeDefaultAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT,choreographyTask.getInitiatingPartecipant().replace(" ", "_") ,xtw);
 		if(choreographyTask.getInitiatingPartecipant() != null) {
 			xtw.writeStartElement(ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT);
 			xtw.writeCharacters(choreographyTask.getInitiatingPartecipant().replace(" ", "_"));
@@ -108,10 +110,6 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
 			xtw.writeCharacters("retMessageFlow" + choreographyTask.getId());
 			xtw.writeEndElement();
 		}
-//		writeQualifiedAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT,choreographyTask.getPartecipant() ,xtw);
-//		writeQualifiedAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_MESSAGE,choreographyTask.getInitiatingMessage() ,xtw);
-//		writeQualifiedAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_RETURN_MESSAGE,choreographyTask.getReturnMessage() ,xtw);
-		
 	}
 
 	@Override

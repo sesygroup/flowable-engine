@@ -149,5 +149,28 @@
             <column  name="tenant_id" type="varchar(255)" />
         </addColumn>
     </changeSet>
+    
+    <changeSet id="4" author="flowable">      
+	    <addColumn tableName="ACT_DE_MODEL">
+	         <column name="model_ref" type="varchar(255)">
+	         	<constraints nullable="true" />
+	         </column>
+	    </addColumn>
+	    <addColumn tableName="ACT_DE_MODEL">
+	         <column name="participant" type="varchar(255)">
+	         	<constraints nullable="true" />
+	         </column>
+	    </addColumn>
+	    <addColumn tableName="ACT_DE_MODEL_HISTORY">
+	         <column name="model_ref" type="varchar(255)">
+	         	<constraints nullable="true" />
+	         </column>
+	    </addColumn>
+	    <addColumn tableName="ACT_DE_MODEL_HISTORY">
+	         <column name="participant" type="varchar(255)">
+	         	<constraints nullable="true" />
+	         </column>
+	    </addColumn>
+	</changeSet>
 
 </databaseChangeLog>

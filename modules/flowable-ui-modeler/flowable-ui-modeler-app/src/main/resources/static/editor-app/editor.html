@@ -135,7 +135,7 @@
                                 <div class="selected-item-title">
                                     <a ng-click="propertyWindowState.toggle()">
                                         <i class="glyphicon"
-                                           ng-class="{'glyphicon-chevron-right': propertyWindowState.collapsed, 'glyphicon-chevron-down': !propertyWindowState.collapsed}"></i>
+                                        ng-class="{'glyphicon-chevron-right': propertyWindowState.collapsed, 'glyphicon-chevron-down': !propertyWindowState.collapsed}"></i>
                                         <span ng-show="selectedItem.title != undefined && selectedItem.title != null && selectedItem.title.length > 0">{{selectedItem.title}}</span>
                                         <span ng-show="!selectedItem || selectedItem.title == undefined || selectedItem.title == null || selectedItem.title.length == 0">{{modelData.name}}</span>
                                     </a>
@@ -144,25 +144,56 @@
                             <div class="selected-item-body">
                                 <div>
                                     <div class="property-row" ng-repeat="property in selectedItem.properties"
-                                         ng-click="propertyClicked($index)" ng-class="{'clear' : $index%2 == 0}">
+                                        ng-click="propertyClicked($index)" ng-class="{'clear' : $index%2 == 0}">
                                         <span class="title" ng-if="!property.hidden" title="{{ property.description | translate}}">{{ property.title | translate }}&nbsp;:</span>
                                         <span class="title-removed" ng-if="property.hidden"><i>{{ property.title }}&nbsp;({{'PROPERTY.REMOVED' | translate}})&nbsp;:</i></span>
                                         <span class="value">
-	                                    <ng-include
+                                        <ng-include
                                                 src="getPropertyTemplateUrl($index)"
                                                 ng-if="!property.hasReadWriteMode"></ng-include>
-	                                    <ng-include src="getPropertyReadModeTemplateUrl($index)"
+                                        <ng-include src="getPropertyReadModeTemplateUrl($index)"
                                                     ng-if="property.hasReadWriteMode && property.mode == 'read'"></ng-include>
-	                                    <ng-include src="getPropertyWriteModeTemplateUrl($index)"
+                                        <ng-include src="getPropertyWriteModeTemplateUrl($index)"
                                                     ng-if="property.hasReadWriteMode && property.mode == 'write'"></ng-include>
-	                                </span>
+                                    </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
+                <div id="projectionWrapper" class="col-xs-12" ng-if="show()">
+                    <div class="selected-item-title">
+                        <span ng-show="selectedItem.title != undefined && selectedItem.title != null && selectedItem.title.length > 0">Projections</span>
+                    </div>
+                    <div class="item fadein" ng-repeat="process in model.processes.data track by $index">
+                        <div class="item-box" ng-style="{'background-image': 'url(\'' + getModelThumbnailUrl(process.id, imageVersion) + '\')', 'background-repeat': 'no-repeat'}" ng-click="showProcessDetails(process);">
+                            <div class="actions">
+                                <span class="badge">v{{process.version}}</span>
+                                <div class="btn-group pull-right">
+                                    <button id="detailsButton" type="button" ng-click="showProcessDetails(process); $event.stopPropagation();" class="btn btn-default" title="{{'PROCESS.ACTION.DETAILS' | translate}}">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                    <button id="editButton" type="button" ng-click="editProcessDetails(process); $event.stopPropagation();" class="btn btn-default" title="{{'PROCESS.ACTION.OPEN-IN-EDITOR' | translate}}">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <h3 class="truncate" title="{{process.name}}">
+                                    {{process.name}}
+                                </h3>
+                                <div class="basic-details truncate">
+                                    <span><i class="glyphicon glyphicon-user"></i> {{process.createdBy}}</span> <span title="{{process.lastUpdated | dateformat:'LLLL'}}"><i class="glyphicon glyphicon-pencil"></i> {{process.lastUpdated | dateformat}}</span>
+                                </div>
+                                <p>{{process.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
             </div>
         </div>
     </div>
 </div>
+
+

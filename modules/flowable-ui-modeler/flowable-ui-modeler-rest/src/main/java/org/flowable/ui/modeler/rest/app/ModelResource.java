@@ -12,22 +12,41 @@
  */
 package org.flowable.ui.modeler.rest.app;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.converter.BpmnXMLConverter;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.FlowElement;
+import org.flowable.bpmn.model.FlowNode;
+import org.flowable.bpmn.model.Gateway;
+import org.flowable.bpmn.model.SequenceFlow;
 import org.flowable.editor.language.json.converter.BpmnJsonConverter;
 import org.flowable.idm.api.User;
 import org.flowable.ui.common.security.SecurityUtils;
 import org.flowable.ui.common.service.exception.BadRequestException;
 import org.flowable.ui.common.service.exception.ConflictingRequestException;
 import org.flowable.ui.common.service.exception.InternalServerErrorException;
+import org.flowable.ui.common.util.XmlUtil;
+import org.flowable.ui.modeler.domain.AbstractModel;
 import org.flowable.ui.modeler.domain.Model;
 import org.flowable.ui.modeler.model.ModelKeyRepresentation;
 import org.flowable.ui.modeler.model.ModelRepresentation;
 import org.flowable.ui.modeler.repository.ModelRepository;
+import org.flowable.ui.modeler.service.ModelImageService;
 import org.flowable.ui.modeler.serviceapi.ModelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +66,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjector;
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjectorException;
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjectorRequest;
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjectorResponse;
+
+
 @RestController
 @RequestMapping("/app")
 public class ModelResource {
@@ -65,6 +90,9 @@ public class ModelResource {
 
     @Autowired
     protected ObjectMapper objectMapper;
+    
+    @Autowired
+    protected ModelImageService modelImageService;
 
     protected BpmnJsonConverter bpmnJsonConverter = new BpmnJsonConverter();
 
@@ -208,8 +236,9 @@ public class ModelResource {
         boolean currentUserIsOwner = model.getLastUpdatedBy().equals(currentUser.getId());
         String resolveAction = values.getFirst("conflictResolveAction");
 
-        // If timestamps differ, there is a conflict or a conflict has been resolved by the user
-        if (model.getLastUpdated().getTime() != lastUpdated) {
+        // If timestamps differ, there is a conflict or a conflict has been resolved by the user (no for projection - coreography)
+        if (model.getLastUpdated().getTime() != lastUpdated && 
+        		!(model.getModelType() == AbstractModel.MODEL_TYPE_CHOREOGRAPHY || model.getModelType() == AbstractModel.MODEL_TYPE_PROJECTION)) {
 
             if (RESOLVE_ACTION_SAVE_AS.equals(resolveAction)) {
 
@@ -284,25 +313,164 @@ public class ModelResource {
         }
 
         String json = values.getFirst("json_xml");
-
-        try {
-			ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(json);
-
-			ObjectNode propertiesNode = (ObjectNode) editorJsonNode.get("properties");
-			String processId = key;
-			propertiesNode.put("process_id", processId);
-			propertiesNode.put("name", name);
-			if (StringUtils.isNotEmpty(description)) {
-				propertiesNode.put("documentation", description);
+        
+        //-- logic about save or update projection - coreography --
+        if(values.getFirst("participant") != null && !values.getFirst("participant").equals("undefined")) {
+        	
+        	Model projection = modelService.getProjection(values.getFirst("participant"), model.getId());
+        	Bpmn2ChoreographyProjector bpmn2ChoreographyProjector = new Bpmn2ChoreographyProjector();
+            Bpmn2ChoreographyProjectorRequest bpmn2ChoreographyProjectorRequest = new Bpmn2ChoreographyProjectorRequest();
+            bpmn2ChoreographyProjectorRequest.setParticipantUsedToBpmn2Projection(values.getFirst("participant"));
+            BpmnModel bpmnModel = modelService.getBpmnModel(model);
+			byte[] xml = new BpmnXMLConverter().convertToXML(bpmnModel);
+			//test
+//			Bpmn2ChoreographyProjectorResponse response = null;
+			try {
+//			File BPMN2File = new File("test_01.bpmn20.xml");
+//			bpmn2ChoreographyProjectorRequest.setBpmn2Content(FileUtils.readFileToByteArray(BPMN2File));
+			FileUtils.writeByteArrayToFile(new File("test_01.xml"), xml);
+			} catch (Exception e) {
+				// TODO: handle exception
+				String g;
 			}
-			editorJsonNode.set("properties", propertiesNode);
-            model = modelService.saveModel(model.getId(), name, key, description, editorJsonNode.toString(), newVersion,
-                    newVersionComment, SecurityUtils.getCurrentUserObject());
-            return new ModelRepresentation(model);
+			//test end
+			bpmn2ChoreographyProjectorRequest.setBpmn2Content(xml);
+			Bpmn2ChoreographyProjectorResponse response = null;
+			try {
+				response = bpmn2ChoreographyProjector.project(bpmn2ChoreographyProjectorRequest);
+			} catch (Bpmn2ChoreographyProjectorException e) {
+				LOGGER.error("Error saving model {}", model.getId(), e);
+                throw new BadRequestException("Process model could not be saved " + model.getId());
+			}
+			BpmnModel bpmnProjection = null;
+			try {
+				FileUtils.writeByteArrayToFile(new File("temporary.xml"), response.getBpmn2Content());
+	            XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
+	            InputStream xmlIn = new FileInputStream("temporary.xml");
+	            XMLStreamReader xtr = xif.createXMLStreamReader(xmlIn);
+	            bpmnProjection = new BpmnXMLConverter().convertToChoreographyBpmnModel(xtr);
+	            //test
+	            //byte[] xmlt = new BpmnXMLConverter().convertToXML(bpmnProjection);
+	            //FileUtils.writeByteArrayToFile(new File("temporary.xml"), xmlt);
+	            //test end
+			} catch (FileNotFoundException e) {
+				LOGGER.error("Error saving model {}", model.getId(), e);
+                throw new BadRequestException("Process model could not be saved " + model.getId());
+			} catch (IOException e) {
+				LOGGER.error("Error saving model {}", model.getId(), e);
+                throw new BadRequestException("Process model could not be saved " + model.getId());
+			} catch (XMLStreamException e) {
+				LOGGER.error("Error saving model {}", model.getId(), e);
+                throw new BadRequestException("Process model could not be saved " + model.getId());
+			}
+			
+			Model modelProjection = new Model();
+			
+			//-- add graphic propoerties for gateway with different id --
+			for (FlowElement elementGraphic : bpmnProjection.getProcesses().get(0).getFlowElements()) {
+				if(bpmnModel.getGraphicInfo(elementGraphic.getId()) == null) {
+					if(elementGraphic instanceof FlowNode) {
+						FlowNode gatewayGraphic = (FlowNode) elementGraphic;
+						if(!gatewayGraphic.getIncomingFlows().isEmpty() && gatewayGraphic.getIncomingFlows().get(0) != null) {
+							for (FlowElement takeGraphic : bpmnModel.getProcesses().get(0).getFlowElements()) {
+								if(takeGraphic instanceof FlowNode) {
+									FlowNode takeGatewayGraphic = (FlowNode) takeGraphic;
+									if(takeGatewayGraphic.getIncomingFlows() != null) {
+										for (SequenceFlow sequenceTakeGraphic : takeGatewayGraphic.getIncomingFlows()) {
+											for (SequenceFlow sequenceGraphic :  gatewayGraphic.getIncomingFlows()) {
+												if(sequenceGraphic.getId().equals(sequenceTakeGraphic.getId())) {
+													bpmnModel.getLocationMap().put(elementGraphic.getId(), bpmnModel.getGraphicInfo(takeGraphic.getId()));
+													bpmnModel.getFlowLocationMap().put(elementGraphic.getId(), bpmnModel.getFlowLocationGraphicInfo(takeGraphic.getId()));
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(!gatewayGraphic.getOutgoingFlows().isEmpty() && gatewayGraphic.getOutgoingFlows().get(0) != null) {
+							for (FlowElement takeGraphic : bpmnModel.getProcesses().get(0).getFlowElements()) {
+								if(takeGraphic instanceof FlowNode) {
+									FlowNode takeGatewayGraphic = (FlowNode) takeGraphic;
+									if(takeGatewayGraphic.getOutgoingFlows() != null) {
+										for (SequenceFlow sequenceTakeGraphic : takeGatewayGraphic.getOutgoingFlows()) {
+											for (SequenceFlow sequenceGraphic :  gatewayGraphic.getOutgoingFlows()) {
+												if(sequenceGraphic.getId().equals(sequenceTakeGraphic.getId())) {
+													bpmnModel.getLocationMap().put(elementGraphic.getId(), bpmnModel.getGraphicInfo(takeGraphic.getId()));
+													bpmnModel.getFlowLocationMap().put(elementGraphic.getId(), bpmnModel.getFlowLocationGraphicInfo(takeGraphic.getId()));
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			if(projection != null) {
+        		modelProjection.setId(projection.getId());
+        		BpmnModel projectionBpmnRead = modelService.getBpmnModel(projection);
+//        		bpmnProjection.setLocationMap(projectionBpmnRead.getLocationMap());
+//        		bpmnProjection.setFlowLocationMap(projectionBpmnRead.getFlowLocationMap());
+        		//TODO rendere effettivi i commenti sopra e cancellare le due linee di codice sotto
+        		bpmnProjection.setLocationMap(bpmnModel.getLocationMap());
+        		bpmnProjection.setFlowLocationMap(bpmnModel.getFlowLocationMap());
+        	} else {
+        		bpmnProjection.setLocationMap(bpmnModel.getLocationMap());
+        		bpmnProjection.setFlowLocationMap(bpmnModel.getFlowLocationMap());
+        	}
+			
+			ObjectNode modelNode = bpmnJsonConverter.convertToJson(bpmnProjection);
 
-        } catch (Exception e) {
-            LOGGER.error("Error saving model {}", model.getId(), e);
-            throw new BadRequestException("Process model could not be saved " + model.getId());
+			String keyProjection = model.getKey() + "_" + values.getFirst("participant");
+            String nameProjection = model.getName() + "_" + values.getFirst("participant");
+
+            
+            modelProjection.setKey(keyProjection);
+            modelProjection.setName(nameProjection);
+            modelProjection.setDescription(model.getDescription());
+            modelProjection.setModelType(AbstractModel.MODEL_TYPE_PROJECTION);
+            modelProjection.setParticipant(values.getFirst("participant"));
+            modelProjection.setModelRef(model.getId());
+            modelProjection.setVersion(1);
+            modelProjection.setCreated(Calendar.getInstance().getTime());
+            modelProjection.setCreatedBy(SecurityUtils.getCurrentUserObject().getId());
+            modelProjection.setModelEditorJson(modelNode.toString());
+            modelProjection.setLastUpdated(Calendar.getInstance().getTime());
+            modelProjection.setLastUpdatedBy(SecurityUtils.getCurrentUserObject().getId());
+            modelProjection.setTenantId(model.getTenantId());
+        	
+        	// Thumbnail
+            byte[] thumbnail = modelImageService.generateThumbnailImage(model, modelNode);
+            if (thumbnail != null) {
+            	modelProjection.setThumbnail(thumbnail);
+            }
+        	modelRepository.save(modelProjection);
+        	
+        	return new ModelRepresentation(modelProjection);
+   
+        } else {
+        	try {
+    			ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(json);
+
+    			ObjectNode propertiesNode = (ObjectNode) editorJsonNode.get("properties");
+    			String processId = key;
+    			propertiesNode.put("process_id", processId);
+    			propertiesNode.put("name", name);
+    			if (StringUtils.isNotEmpty(description)) {
+    				propertiesNode.put("documentation", description);
+    			}
+    			editorJsonNode.set("properties", propertiesNode);
+                model = modelService.saveModel(model.getId(), name, key, description, editorJsonNode.toString(), newVersion,
+                        newVersionComment, SecurityUtils.getCurrentUserObject());
+                return new ModelRepresentation(model);
+
+            } catch (Exception e) {
+                LOGGER.error("Error saving model {}", model.getId(), e);
+                throw new BadRequestException("Process model could not be saved " + model.getId());
+            }
         }
     }
 

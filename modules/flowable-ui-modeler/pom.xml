@@ -20,8 +20,26 @@
 		<module>flowable-ui-modeler-app</module>
 	</modules>
 
+	<!--<repositories>
+		<repository>
+			<id>disim-nexus-releases</id>
+			<url>http://nexus.disim.univaq.it/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>	
+	</repositories>   -->
+	
 	<dependencyManagement>
 	  <dependencies>
+	   <!--   <dependency>
+				<groupId>eu.chorevolution.transformations.generativeapproach</groupId>
+				<artifactId>bpmn2choreography-projector</artifactId>
+				<version>2.2.0</version>
+		</dependency>-->
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-ui-modeler-logic</artifactId>

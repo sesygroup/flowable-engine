@@ -10,9 +10,9 @@
     	<version>6.5.0-SNAPSHOT</version>
 	</parent>
 	<packaging>jar</packaging>
-
-	<dependencies>
 	
+	
+	<dependencies>
         <!-- Flowable -->
         <dependency>
            <groupId>org.flowable</groupId>
@@ -208,6 +208,12 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- choreography for projections -->
+        <dependency>
+			<groupId>eu.chorevolution.transformations.generativeapproach</groupId>
+			<artifactId>bpmn2choreography-projector</artifactId>
+		</dependency>
 	</dependencies>
 
 	<profiles>

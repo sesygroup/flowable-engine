@@ -15,6 +15,35 @@
 
 	<packaging>pom</packaging>
 	<version>6.5.0-SNAPSHOT</version>
+	
+	<!-- choreography projections -->
+	<repositories>
+		<repository>
+			<id>disim-nexus-releases</id>
+			<url>http://nexus.disim.univaq.it/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<!--http://nexus.disim.univaq.it/content/repositories/releases/
+	https://repository.ow2.org/nexus/content/repositories/public/eu/chorevolution/transformations/generativeapproach/bpmn2choreography-projector/2.1.0/ 
+	<distributionManagement>
+      <repository>
+         <id>disim-nexus-releases</id>
+         <name>DISIM Univaq Release Repository</name>
+         <url>http://repository.ow2.org/nexus/service/local/staging/deploy/maven2</url>
+      </repository>
+      <snapshotRepository>
+         <id>disim-nexus-snapshots</id>
+         <name>DISIM Univaq Snapshots Repository</name>
+         <url>http://nexus.disim.univaq.it/content/repositories/snapshots/</url>
+      </snapshotRepository>
+   </distributionManagement> -->
+   
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
@@ -73,8 +102,51 @@
 		<flowable.osgi.remove.headers>Ignore-Package,Include-Resource,Private-Package,Bundle-DocURL</flowable.osgi.remove.headers>
 		<flowable.osgi.include.resource>{maven-resources}</flowable.osgi.include.resource>
 		<flowable.osgi.embed></flowable.osgi.embed>
+		<!-- choreography projections -->
+		<bpmn2choreography-projector.version>2.2.0</bpmn2choreography-projector.version>
 	</properties>
 
+	<!-- choreography projections  -->
+	<!--<repositories>
+	<repository>
+			<id>disim-nexus-releases</id>
+			<url>https://repository.ow2.org/nexus/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>disim-nexus-releases</id>
+			<url>http://nexus.disim.univaq.it/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>	
+		<repository>
+			<id>disim-nexus-3rd-party</id>
+			<url>http://nexus.disim.univaq.it/content/repositories/thirdparty/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>		
+		<repository>
+			<id>disim-nexus-snapshots</id>
+			<url>http://nexus.disim.univaq.it/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository> 
+	</repositories>-->
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -993,6 +1065,12 @@
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
 				<version>1.4.10</version>
+			</dependency>
+			<!-- choreography projections -->
+			<dependency>
+				<groupId>eu.chorevolution.transformations.generativeapproach</groupId>
+				<artifactId>bpmn2choreography-projector</artifactId>
+				<version>${bpmn2choreography-projector.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

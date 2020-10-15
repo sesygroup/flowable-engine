@@ -86,7 +86,7 @@ public class FlowableModelQueryService {
     protected CmmnXmlConverter cmmnXmlConverter = new CmmnXmlConverter();
     protected CmmnJsonConverter cmmnJsonConverter = new CmmnJsonConverter();
 
-    public ResultListDataRepresentation getModels(String filter, String sort, Integer modelType, HttpServletRequest request) {
+    public ResultListDataRepresentation getModels(String filter, String sort, Integer modelType, HttpServletRequest request, String modelRef) {
 
         // need to parse the filterText parameter ourselves, due to encoding issues with the default parsing.
         String filterText = null;
@@ -104,13 +104,18 @@ public class FlowableModelQueryService {
 
         String validFilter = makeValidFilterText(filterText);
 
-        if (validFilter != null) {
-            models = modelRepository.findByModelTypeAndFilter(modelType, validFilter, sort);
-
+        //-- find projection by modelRef - choreography --
+        if(modelRef != null) {
+        	models = modelRepository.findModelsByModelRef(modelRef);
         } else {
-            models = modelRepository.findByModelType(modelType, sort);
-        }
+        	if (validFilter != null) {
+                models = modelRepository.findByModelTypeAndFilter(modelType, validFilter, sort);
 
+            } else {
+                models = modelRepository.findByModelType(modelType, sort);
+            }
+        }
+        
         if (CollectionUtils.isNotEmpty(models)) {
             List<String> addedModelIds = new ArrayList<>();
             for (Model model : models) {

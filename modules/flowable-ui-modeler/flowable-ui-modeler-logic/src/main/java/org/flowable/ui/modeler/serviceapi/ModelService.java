@@ -79,4 +79,6 @@ public interface ModelService {
     void deleteModel(String modelId);
 
     ReviveModelResultRepresentation reviveProcessModelHistory(ModelHistory modelHistory, User user, String newVersionComment);
+    
+    Model getProjection(String participant, String modelRef);
 }

@@ -362,4 +362,10 @@ public interface BpmnXMLConstants {
     public static final String ATTRIBUTE_PARTECIPANT_BAND_KIND = "participantBandKind";
     public static final String TOP_INITIATING = "top_initiating";
     public static final String BOTTOM_NON_INITIATING = "bottom_non_initiating";
+    public static final String ELEMENT_OUTGOING = "outgoing";
+    public static final String ELEMENT_INCOMING = "incoming";
+    public static final String ATTRIBUTE_GATEWAY_DIRECTION = "gatewayDirection";
+    public static final String GATEWAY_CONVERGING = "Converging";
+    public static final String GATEWAY_DIVERGING = "Diverging";
+    
 }

@@ -85,6 +85,14 @@ public class ModelRepositoryImpl implements ModelRepository {
         parameters.put("tenantId", tenantProvider.getTenantId());
         return sqlSessionTemplate.selectList(NAMESPACE + "selectModelByParameters", parameters);
     }
+    
+    // -- add to search projections by modelRef -- choreography
+    @Override
+    public List<Model> findModelsByModelRef(String modelRef) {
+    	Map<String, Object> params = new HashMap<>();
+        params.put("modelRef", modelRef);
+        return findModelsByParameters(params);
+    }
 
     @Override
     public void save(Model model) {
@@ -101,5 +109,14 @@ public class ModelRepositoryImpl implements ModelRepository {
     public void delete(Model model) {
         sqlSessionTemplate.delete(NAMESPACE + "deleteModel", model);
     }
+
+    //-- find single projection - choreography --
+	@Override
+	public List<Model> findModelsByModelRefAndParticipant(String modelRef, String participant) {
+		Map<String, Object> params = new HashMap<>();
+    	params.put("modelRef", modelRef);
+    	params.put("participant", participant);
+    	return findModelsByParameters(params);
+	}
 
 }

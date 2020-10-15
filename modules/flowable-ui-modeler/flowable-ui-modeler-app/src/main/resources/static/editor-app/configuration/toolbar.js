@@ -175,6 +175,23 @@ FLOWABLE.TOOLBAR_CONFIG = {
             "cssClass" : "toolbar-separator",
             "disableInForm" : true
         },
+        //choreography projections
+        {
+    	    "type" : "button",
+    	    "title" : "Create Projection",
+    	    "cssClass" : "editor-icon editor-icon-projection",
+    	    "action" : "FLOWABLE.TOOLBAR.ACTIONS.createProjection",
+    	    "id" : "projection-button",
+            "disableInForm" : true,
+            "disableInProcess" : true
+    	},
+        {
+            "type" : "separator",
+            "title": "",
+            "cssClass" : "toolbar-separator",
+            "disableInForm" : true,
+            "disableInProcess" : true
+        },
         {
             "type" : "button",
             "title" : "TOOLBAR.ACTION.HELP",

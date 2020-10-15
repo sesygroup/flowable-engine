@@ -523,6 +523,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 
                 } else if (ELEMENT_PARTICIPANT.equals(xtr.getLocalName())) {
                     participantParser.parse(xtr, model);
+                    // TODO setta un lista di partecipanti da passare al coreography task
 
                 } else if (ELEMENT_MESSAGE_FLOW.equals(xtr.getLocalName())) {
                     messageFlowParser.parse(xtr, model);
@@ -691,9 +692,15 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 
                 ProcessExport.writeProcess(process, model, xtw);
 
+                //-- choreography - projection - list participant to no repeat --
+                List<String> participantNoRepeat = new ArrayList<String>();
+                
                 for (FlowElement flowElement : process.getFlowElements()) {
-                	// add partecipants and flowmessages to xml - choreography
-                	addChoreographyElements(flowElement, xtw);
+                	// add participants and flowmessages to xml - choreography
+                	addChoreographyElements(flowElement, xtw, participantNoRepeat);
+                }
+                
+                for (FlowElement flowElement : process.getFlowElements()) {
                     createXML(flowElement, model, xtw);
                 }
 
@@ -725,20 +732,22 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
         }
     }
 
-    private void addChoreographyElements(FlowElement flowElement, XMLStreamWriter xtw) throws Exception {
+    private void addChoreographyElements(FlowElement flowElement, XMLStreamWriter xtw, List<String> participantNoRepeat) throws Exception {
     	if(flowElement instanceof ChoreographyTask) {
 			ChoreographyTask chor = (ChoreographyTask) flowElement;
-			if(chor.getInitiatingPartecipant() != null) {
+			if(chor.getInitiatingPartecipant() != null && !participantNoRepeat.contains(chor.getInitiatingPartecipant())) {
 				xtw.writeStartElement(ELEMENT_PARTECIPANT);
 				xtw.writeAttribute(ATTRIBUTE_ID, chor.getInitiatingPartecipant().replace(" ", "_"));
 				xtw.writeAttribute(ATTRIBUTE_NAME, chor.getInitiatingPartecipant()); 
 				xtw.writeEndElement();
+				participantNoRepeat.add(chor.getInitiatingPartecipant());
 			}
-			if(chor.getPartecipant() != null) {
+			if(chor.getPartecipant() != null && !participantNoRepeat.contains(chor.getPartecipant())) {
 				xtw.writeStartElement(ELEMENT_PARTECIPANT);
 				xtw.writeAttribute(ATTRIBUTE_ID, chor.getPartecipant().replace(" ", "_"));
 				xtw.writeAttribute(ATTRIBUTE_NAME, chor.getPartecipant()); 
 				xtw.writeEndElement();
+				participantNoRepeat.add(chor.getPartecipant());
 			}
 			if(chor.getInitiatingMessage() != null) {
 				xtw.writeStartElement(ELEMENT_MESSAGE_FLOW);

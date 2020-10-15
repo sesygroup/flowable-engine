@@ -74,6 +74,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjector;
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjectorException;
+import eu.chorevolution.transformations.generativeapproach.bpmn2choreographyprojector.Bpmn2ChoreographyProjectorRequest;
+
 @Service
 @Transactional
 public class ModelServiceImpl implements ModelService {
@@ -84,6 +88,11 @@ public class ModelServiceImpl implements ModelService {
 
     protected static final String PROCESS_NOT_FOUND_MESSAGE_KEY = "PROCESS.ERROR.NOT-FOUND";
 
+    // test
+    @Autowired
+    protected ModelService modelService;
+    // test
+    
     @Autowired
     protected ModelImageService modelImageService;
 
@@ -300,7 +309,15 @@ public class ModelServiceImpl implements ModelService {
             childNode.set("stencil", stencilNode);
             stencilNode.put("id", "StartNoneEvent");
             json = editorNode.toString();
-
+            Bpmn2ChoreographyProjector bpmn2ChoreographyProjector = new Bpmn2ChoreographyProjector();
+            Bpmn2ChoreographyProjectorRequest bpmn2ChoreographyProjectorRequest = new Bpmn2ChoreographyProjectorRequest();
+            bpmn2ChoreographyProjectorRequest.setParticipantUsedToBpmn2Projection("p1");
+			try {
+				bpmn2ChoreographyProjector.project(bpmn2ChoreographyProjectorRequest);
+			} catch (Bpmn2ChoreographyProjectorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         } else {
             ObjectNode editorNode = objectMapper.createObjectNode();
             editorNode.put("id", "canvas");
@@ -369,6 +386,9 @@ public class ModelServiceImpl implements ModelService {
         newModel.setLastUpdated(Calendar.getInstance().getTime());
         newModel.setLastUpdatedBy(createdBy.getId());
         newModel.setTenantId(model.getTenantId());
+        // choreography 
+        newModel.setModelRef(model.getModelRef());
+        newModel.setParticipant(model.getParticipant());
 
         persistModel(newModel);
         return newModel;
@@ -487,7 +507,6 @@ public class ModelServiceImpl implements ModelService {
                 modelObject.setThumbnail(imageBytes);
             }
         }
-
         return persistModel(modelObject);
     }
 
@@ -720,14 +739,56 @@ public class ModelServiceImpl implements ModelService {
             }
 
             if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN
-            || model.getModelType().intValue() == Model.MODEL_TYPE_CHOREOGRAPHY)) {
+            		|| model.getModelType().intValue() == Model.MODEL_TYPE_CHOREOGRAPHY 
+            		|| model.getModelType().intValue() == Model.MODEL_TYPE_PROJECTION)) {
 
                 // Thumbnail
                 byte[] thumbnail = modelImageService.generateThumbnailImage(model, jsonNode);
                 if (thumbnail != null) {
                     model.setThumbnail(thumbnail);
                 }
-
+                
+////                test
+//                Bpmn2ChoreographyProjector bpmn2ChoreographyProjector = new Bpmn2ChoreographyProjector();
+//                Bpmn2ChoreographyProjectorRequest bpmn2ChoreographyProjectorRequest = new Bpmn2ChoreographyProjectorRequest();
+//                bpmn2ChoreographyProjectorRequest.setParticipantUsedToBpmn2Projection("p1");
+//                BpmnModel bpmnModel = modelService.getBpmnModel(model);
+//				byte[] xml = new BpmnXMLConverter().convertToXML(bpmnModel);
+//				
+////				FileOutputStream destStream = null;
+//				String xsdTst = null;
+//				BufferedReader reader = null;
+//				try {
+//					reader = new BufferedReader(new FileReader("C:\\Users\\giova\\OneDrive\\Desktop\\test.txt"));
+////					destStream = new FileOutputStream("C:\\Users\\giova\\OneDrive\\Desktop\\test.txt");
+////					destStream.write(xml);
+////					destStream.close();
+//					String line = reader.readLine();
+//					while(line!=null) {
+//						if(xsdTst == null) {
+//							xsdTst = line;
+//						} else {
+//							xsdTst = xsdTst + "\n" + line;
+//						}
+//						 
+//					     line = reader.readLine();
+//					}
+//					bpmn2ChoreographyProjectorRequest.setBpmn2Content(xml);
+//				} catch (FileNotFoundException e1) {
+//					e1.printStackTrace();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				
+//    			try {
+//    				Bpmn2ChoreographyProjectorResponse response = bpmn2ChoreographyProjector.project(bpmn2ChoreographyProjectorRequest);
+//    				Bpmn2ChoreographyProjectorResponse view = response;
+//    			} catch (Bpmn2ChoreographyProjectorException e) {
+//    				// TODO Auto-generated catch block
+//    				e.printStackTrace();
+//    			}
+////    			test
+    			
                 modelRepository.save(model);
 
                 // Relations
@@ -902,4 +963,15 @@ public class ModelServiceImpl implements ModelService {
 
         return modelKeyMap;
     }
+
+    //-- projection - choreography --
+	@Override
+	public Model getProjection(String participant, String modelRef) {
+		 List<Model> projections = modelRepository.findModelsByModelRefAndParticipant(modelRef, participant);
+		 Model projection = null;
+		 if(projections != null && !projections.isEmpty()) {
+			 projection = projections.get(0);
+		 }
+		 return projection;
+	}
 }

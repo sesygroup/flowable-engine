@@ -275,6 +275,16 @@ FLOWABLE.TOOLBAR = {
         help: function (services) {
             FLOWABLE_EDITOR_TOUR.gettingStarted(services.$scope, services.$translate, services.$q);
         },
+
+        createProjection: function (services) {
+
+            _internalCreateModal({
+                backdrop: true,
+                keyboard: true,
+                template: 'editor-app/popups/create-projection.html?version=' + Date.now(),
+                scope: services.$scope
+            }, services.$modal, services.$scope);
+        },
         
         /**
          * Helper method: fetches the Oryx View plugin from the provided scope,
@@ -349,7 +359,11 @@ angular.module('flowableModeler').controller('SaveModelCtrl', [ '$rootScope', '$
                 if (stencilNameSpace !== undefined && stencilNameSpace !== null && stencilNameSpace.indexOf('cmmn1.1') !== -1) {
                     $location.path("/casemodels");
                 	return;
-            	}
+                }
+                if(stencilNameSpace !== undefined && stencilNameSpace !== null && stencilNameSpace.indexOf('bpmn2.0_choreography') !== -1) {
+                    $location.path("/choreographies");
+                	return;
+                }
         	}
         	$location.path('/processes');
     	});
@@ -436,6 +450,197 @@ angular.module('flowableModeler').controller('SaveModelCtrl', [ '$rootScope', '$
                     successCallback();
                 }
 
+            })
+            .error(function (data, status, headers, config) {
+                if (status == 409) {
+                	$scope.error = {};
+                    $scope.error.isConflict = true;
+                    $scope.error.userFullName = data.customData.userFullName;
+                    $scope.error.isNewVersionAllowed = data.customData.newVersionAllowed;
+                    $scope.error.saveAs = modelMetaData.name + "_2";
+                } else {
+                	$scope.error = undefined;
+                    $scope.saveDialog.errorMessage = data.message;
+                }
+                $scope.status.loading = false;
+            });
+    };
+
+    $scope.isOkButtonDisabled = function() {
+        if ($scope.status.loading) {
+            return false;
+        } else if ($scope.error && $scope.error.conflictResolveAction) {
+            if ($scope.error.conflictResolveAction === 'saveAs') {
+                return !$scope.error.saveAs || $scope.error.saveAs.length == 0;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    $scope.okClicked = function() {
+        if ($scope.error) {
+            if ($scope.error.conflictResolveAction === 'discardChanges') {
+                $scope.close();
+                $route.reload();
+            } else if ($scope.error.conflictResolveAction === 'overwrite'
+                || $scope.error.conflictResolveAction === 'newVersion') {
+                $scope.save();
+            } else if($scope.error.conflictResolveAction === 'saveAs') {
+                $scope.save(function() {
+                    $rootScope.ignoreChanges = true;  // Otherwise will get pop up that changes are not saved.
+                    if (editorManager.getStencilData()) {
+                        var stencilNameSpace = editorManager.getStencilData().namespace;
+                        if (stencilNameSpace !== undefined && stencilNameSpace !== null && stencilNameSpace.indexOf('cmmn1.1') !== -1) {
+                            $location.path("/casemodels");
+                            return;
+                        }
+                    }
+                    $location.path('/processes');
+            	});
+            }
+        }
+    };
+
+}]);
+
+/** Custom controller for the save dialog -- projection - choreography*/
+angular.module('flowableModeler').controller('SaveProjectionCtrl', [ '$rootScope', '$scope', '$http', '$route', '$location', 'editorManager',
+    function ($rootScope, $scope, $http, $route, $location, editorManager) {
+	
+    var modelMetaData = editorManager.getBaseModelData();
+
+    $scope.model = {
+        loading: false,
+        process: {
+             name: '',
+             key: '',
+             description: '',
+             // model type 7 = projections
+                modelType: 7
+        }
+     };
+
+    var saveDialog = { 
+    	'name' : modelMetaData.name,
+    	'key' : modelMetaData.key,
+        'newVersion' : false,
+        'comment' : ''
+    };
+    
+    $scope.saveDialog = saveDialog;
+
+    $scope.participants = [];
+    
+    $scope.createListPaticipants = function () {
+        
+        var model = editorManager.getModel();
+
+        model.childShapes.forEach(element => {
+            if(element.stencil.id === 'ChoreographyTask'){
+                if(element.properties.initiatingpartecipantref != "" 
+                    && !$scope.participants.includes(element.properties.initiatingpartecipantref)){
+                    $scope.participants.push(element.properties.initiatingpartecipantref);
+                }
+                if(element.properties.partecipantref != "" 
+                    && !$scope.participants.includes(element.properties.partecipantref)){
+                    $scope.participants.push(element.properties.partecipantref);
+                }
+            }
+        });
+    }
+
+    $scope.createListPaticipants();
+
+    $scope.participantProjection;
+
+    $scope.status = {
+        loading: false
+    };
+
+    $scope.close = function () {
+    	$scope.$hide();
+    };
+
+    $scope.saveAndClose = function () {
+    	$scope.save(function() {
+        	$location.path('/choreographies');
+    	});
+    };
+    
+    $scope.save = function (successCallback) {
+
+        // Indicator spinner image
+        $scope.status = {
+        	loading: true
+        };
+
+        var json = editorManager.getModel();
+
+        var params = {
+            modeltype: modelMetaData.model.modelType,
+            json_xml: JSON.stringify(json),
+            name: $scope.saveDialog.name,
+            key: $scope.saveDialog.key,
+            description: $scope.saveDialog.description,
+            newversion: $scope.saveDialog.newVersion,
+            comment: $scope.saveDialog.comment,
+            lastUpdated: modelMetaData.lastUpdated,
+            participant: $scope.participantProjection
+        };
+
+        if ($scope.error && $scope.error.isConflict) {
+            params.conflictResolveAction = $scope.error.conflictResolveAction;
+            if ($scope.error.conflictResolveAction === 'saveAs') {
+                params.saveAs = $scope.error.saveAs;
+            }
+        }
+
+        // Update
+        $http({    method: 'POST',
+            data: params,
+            ignoreErrors: true,
+            headers: {'Accept': 'application/json',
+                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+            transformRequest: function (obj) {
+                var str = [];
+                for (var p in obj) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                }
+                return str.join("&");
+            },
+            url: FLOWABLE.URL.putModel(modelMetaData.modelId)})
+
+            .success(function (data, status, headers, config) {
+                editorManager.handleEvents({
+                    type: ORYX.CONFIG.EVENT_SAVED
+                });
+                $scope.modelData.name = $scope.saveDialog.name;
+                $scope.modelData.key = $scope.saveDialog.key;
+                $scope.modelData.lastUpdated = data.lastUpdated;
+                
+                $scope.status.loading = false;
+                $scope.$hide();
+
+                // Fire event to all who is listening
+                var saveEvent = {
+                    type: FLOWABLE.eventBus.EVENT_TYPE_MODEL_SAVED,
+                    model: params,
+                    modelId: modelMetaData.modelId,
+		            eventType: 'update-model'
+                };
+                FLOWABLE.eventBus.dispatch(FLOWABLE.eventBus.EVENT_TYPE_MODEL_SAVED, saveEvent);
+
+                // Reset state
+                $scope.error = undefined;
+                $scope.status.loading = false;
+
+                // Execute any callback
+                if (successCallback) {
+                    successCallback();
+                }
+                $scope.loadProjections();
             })
             .error(function (data, status, headers, config) {
                 if (status == 409) {

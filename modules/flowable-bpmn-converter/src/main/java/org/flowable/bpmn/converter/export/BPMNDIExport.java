@@ -229,7 +229,7 @@ public class BPMNDIExport implements BpmnXMLConstants {
         xtw.writeStartElement(BPMNDI_PREFIX, ELEMENT_DI_EDGE, BPMNDI_NAMESPACE);
         xtw.writeAttribute(ATTRIBUTE_DI_BPMNELEMENT, elementId);
         xtw.writeAttribute(ATTRIBUTE_ID, "BPMNEdge_" + elementId);
-
+        
         List<GraphicInfo> graphicInfoList = model.getFlowLocationGraphicInfo(elementId);
         for (GraphicInfo graphicInfo : graphicInfoList) {
             xtw.writeStartElement(OMGDI_PREFIX, ELEMENT_DI_WAYPOINT, OMGDI_NAMESPACE);

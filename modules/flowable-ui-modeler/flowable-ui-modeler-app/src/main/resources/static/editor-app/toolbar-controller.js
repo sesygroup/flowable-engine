@@ -25,14 +25,25 @@ angular.module('flowableModeler')
 	        {
 	        	if ($rootScope.modelData.model.modelType === 'form')
 		        {
-		        	if (!toolbarItems[i].disableInForm)
+		        	if (!toolbarItems[i].disableInForm || !toolbarItems[i].disableInProcess)
 		        	{
 		        		$scope.items.push(toolbarItems[i]);
 		        	}
 		        }
 	        	else
-	        	{
-	        		$scope.items.push(toolbarItems[i]);
+	        	{   // -- remove projection button for process and cmmn - choreography --
+                    if ($rootScope.modelData.model.stencilset.namespace === 'http://b3mn.org/stencilset/bpmn2.0#' 
+                        || $rootScope.modelData.model.stencilset.namespace === 'http://b3mn.org/stencilset/cmmn1.1#')
+                    {
+                        if (!toolbarItems[i].disableInProcess)
+                        {
+                            $scope.items.push(toolbarItems[i]);
+                        }
+                    }
+                    else 
+                    {
+                        $scope.items.push(toolbarItems[i]);
+                    }
 	        	}
 	        }
     	});

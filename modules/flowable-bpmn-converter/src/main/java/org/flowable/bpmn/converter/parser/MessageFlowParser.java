@@ -32,25 +32,31 @@ public class MessageFlowParser implements BpmnXMLConstants {
         String id = xtr.getAttributeValue(null, ATTRIBUTE_ID);
         if (StringUtils.isNotEmpty(id)) {
             MessageFlow messageFlow = new MessageFlow();
+            // -- add .replace because library transformation return "_0:" in projection - choreography --
+            id = id.replace("_0:", "");
             messageFlow.setId(id);
 
             String name = xtr.getAttributeValue(null, ATTRIBUTE_NAME);
             if (StringUtils.isNotEmpty(name)) {
+            	name = name.replace("_0:", "");
                 messageFlow.setName(name);
             }
 
             String sourceRef = xtr.getAttributeValue(null, ATTRIBUTE_FLOW_SOURCE_REF);
             if (StringUtils.isNotEmpty(sourceRef)) {
+            	sourceRef = sourceRef.replace("_0:", "");
                 messageFlow.setSourceRef(sourceRef);
             }
 
             String targetRef = xtr.getAttributeValue(null, ATTRIBUTE_FLOW_TARGET_REF);
             if (StringUtils.isNotEmpty(targetRef)) {
+            	targetRef = targetRef.replace("_0:", "");
                 messageFlow.setTargetRef(targetRef);
             }
 
             String messageRef = xtr.getAttributeValue(null, ATTRIBUTE_MESSAGE_REF);
             if (StringUtils.isNotEmpty(messageRef)) {
+            	messageRef = messageRef.replace("_0:", "");
                 messageFlow.setMessageRef(messageRef);
             }
 

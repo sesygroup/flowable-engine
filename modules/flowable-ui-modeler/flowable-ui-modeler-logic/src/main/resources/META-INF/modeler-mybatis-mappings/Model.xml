@@ -19,6 +19,8 @@
         <result property="modelType" column="model_type" jdbcType="INTEGER" />
         <result property="thumbnail" column="thumbnail" jdbcType="${blobType}" />
         <result property="tenantId" column="tenant_id" jdbcType="VARCHAR" />
+        <result property="modelRef" column="model_ref" jdbcType="VARCHAR" />
+        <result property="participant" column="participant" jdbcType="VARCHAR" />
     </resultMap>
 
     <insert id="insertModel" parameterType="org.flowable.ui.modeler.domain.Model">
@@ -36,7 +38,9 @@
             model_editor_json,
             model_type,
             thumbnail,
-            tenant_id) 
+            tenant_id,
+            model_ref,
+            participant) 
          values (
             #{id, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
@@ -51,7 +55,9 @@
             #{modelEditorJson, jdbcType=VARCHAR},
             #{modelType, jdbcType=INTEGER},
             #{thumbnail, jdbcType=${blobType}},
-            #{tenantId, jdbcType=VARCHAR}
+            #{tenantId, jdbcType=VARCHAR},
+            #{modelRef, jdbcType=VARCHAR},
+            #{participant, jdbcType=VARCHAR}
           )
     </insert>
     
@@ -70,7 +76,9 @@
             model_editor_json = #{modelEditorJson, jdbcType=VARCHAR},
             model_type = #{modelType, jdbcType=INTEGER},
             thumbnail = #{thumbnail, jdbcType=${blobType}},
-            tenant_id = #{tenantId, jdbcType=VARCHAR}
+            tenant_id = #{tenantId, jdbcType=VARCHAR},
+            model_ref = #{modelRef, jdbcType=VARCHAR},
+            participant = #{participant, jdbcType=VARCHAR}
         </set>
         where id = #{id, jdbcType=VARCHAR}
     </update>
@@ -99,6 +107,12 @@
             </if>
             <if test="tenantId != null">
                and tenant_id = #{tenantId, jdbcType=VARCHAR}
+            </if>
+            <if test="modelRef != null">
+               and model_ref = #{modelRef, jdbcType=VARCHAR}
+            </if>
+            <if test="participant != null">
+               and participant = #{participant, jdbcType=VARCHAR}
             </if>
         </where>
         <if test="sort != null">

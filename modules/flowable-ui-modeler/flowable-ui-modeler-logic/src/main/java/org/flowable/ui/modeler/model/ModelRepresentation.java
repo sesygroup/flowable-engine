@@ -38,6 +38,9 @@ public class ModelRepresentation extends AbstractRepresentation {
     protected String comment;
     protected Integer modelType;
     protected String tenantId;
+    // choreography projection
+    protected String modelRef;
+	protected String participant;
 
     public ModelRepresentation(AbstractModel model) {
         initialize(model);
@@ -60,6 +63,8 @@ public class ModelRepresentation extends AbstractRepresentation {
         this.modelType = model.getModelType();
         this.tenantId = model.getTenantId();
 
+        this.modelRef = model.getModelRef();
+        this.participant = model.getParticipant();
         // When based on a ProcessModel and not history, this is always the latest version
         if (model instanceof Model) {
             this.setLatestVersion(true);
@@ -164,6 +169,22 @@ public class ModelRepresentation extends AbstractRepresentation {
         this.tenantId = tenantId;
     }
 
+    public String getModelRef() {
+		return modelRef;
+	}
+
+	public void setModelRef(String modelRef) {
+		this.modelRef = modelRef;
+	}
+
+	public String getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(String participant) {
+		this.participant = participant;
+	}
+	
     public Model toModel() {
         Model model = new Model();
         model.setName(name);

@@ -76,8 +76,8 @@ public class SequenceFlowJsonConverter extends BaseBpmnJsonConverter {
         }
 
         dockNode = objectMapper.createObjectNode();
-        dockNode.put(EDITOR_BOUNDS_X, model.getGraphicInfo(sequenceFlow.getTargetRef()).getWidth() / 2.0);
-        dockNode.put(EDITOR_BOUNDS_Y, model.getGraphicInfo(sequenceFlow.getTargetRef()).getHeight() / 2.0);
+	    dockNode.put(EDITOR_BOUNDS_X, model.getGraphicInfo(sequenceFlow.getTargetRef()).getWidth() / 2.0);
+	    dockNode.put(EDITOR_BOUNDS_Y, model.getGraphicInfo(sequenceFlow.getTargetRef()).getHeight() / 2.0);
         dockersArrayNode.add(dockNode);
         flowNode.set("dockers", dockersArrayNode);
         ArrayNode outgoingArrayNode = objectMapper.createArrayNode();

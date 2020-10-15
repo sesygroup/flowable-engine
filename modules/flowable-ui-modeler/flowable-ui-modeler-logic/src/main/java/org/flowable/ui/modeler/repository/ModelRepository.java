@@ -33,5 +33,10 @@ public interface ModelRepository {
     List<Model> findByParentModelId(String parentModelId);
 
     Long countByModelTypeAndCreatedBy(int modelType, String createdBy);
+    
+    //projection choreography
+    List<Model> findModelsByModelRef(String modelRef);
+    
+    List<Model> findModelsByModelRefAndParticipant(String modelRef, String participant);
 
 }

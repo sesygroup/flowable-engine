@@ -50,9 +50,9 @@ public class ApiModelsResource {
 
     @RequestMapping(value = "/editor/models", method = RequestMethod.GET, produces = "application/json")
     public ResultListDataRepresentation getModels(@RequestParam(required = false) String filter, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer modelType,
-            HttpServletRequest request) {
+            HttpServletRequest request, String modelRef) {
 
-        return modelQueryService.getModels(filter, sort, modelType, request);
+        return modelQueryService.getModels(filter, sort, modelType, request, modelRef);
     }
 
     @RequestMapping(value = "/editor/import-process-model", method = RequestMethod.POST, produces = "application/json")

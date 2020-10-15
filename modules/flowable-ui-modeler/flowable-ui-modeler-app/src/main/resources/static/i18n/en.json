@@ -3714,6 +3714,9 @@
     "MODEL.CONFLICT.WRITE.OPTION.NEWVERSION": "Create new version",
     "MODEL.CONFLICT.SAVEAS" : "Save as:",
 
+    "PROJECTION.CREATE.TITLE" : "Create projection",
+    "PROJECTION.CREATE.PARTECIPANT" : "Partecipant",
+
     "EVENT_TYPE.ACTIVITY.COMPENSATE.TOOLTIP": "An activity is about to be executed as a compensation for another activity. The event targets the activity that is about to be executed for compensation",
     "EVENT_TYPE.ACTIVITY.COMPLETED.TOOLTIP": "An activity has been completed successfully",
     "EVENT_TYPE.ACTIVITY.ERROR.RECEIVED.TOOLTIP": "An activity has received an error event. Dispatched before the actual error has been received by the activity",

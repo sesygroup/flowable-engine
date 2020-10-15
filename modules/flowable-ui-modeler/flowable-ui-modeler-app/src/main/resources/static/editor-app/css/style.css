@@ -500,6 +500,10 @@ li.x-menu-list-item.x-menu-item-active a {
     content: 'q';
 }
 
+.editor-icon-projection:before {
+    content: 'r';
+}
+
 .formbuilder-validation-error-icon {
     position: relative;
     top: -2px;
@@ -1155,9 +1159,20 @@ hot-table .column-header.label {
 }
 
 #contentCanvasWrapper {
-    padding-left: 300px;
+    overflow: auto;
+    /**padding-left: 300px;**/
     transition: 0.3s padding-left;
 }
+
+#projectionWrapper {
+   /** overflow: auto; */
+   height: 1px;
+}
+
+/**#propertiesProjections {
+    height: 250px;
+    overflow: auto; 
+} **/
 
 .collapsedCanvasWrapper {
     padding-left: 0px !important;
