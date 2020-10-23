@@ -329,4 +329,10 @@ public interface StencilConstants {
     final String PROPERTY_PERTECIPANT_REF = "partecipantref";
     final String PROPERTY_INITIATING_MESSAGE = "initiatingmessage";
     final String PROPERTY_RETURN_MESSAGE = "returnmessage";
+    final String PROPERTY_INITIATING_PARTECIPANT_ID = "initiatingpartecipantrefId";
+    final String PROPERTY_PERTECIPANT_ID = "partecipantrefId";
+    final String PROPERTY_INITIATING_MESSAGE_ID = "initiatingmessageId";
+    final String PROPERTY_RETURN_MESSAGE_ID = "returnmessageId";
+    final String PROPERTY_INITIATING_MESSAGE_FLOW_REF = "initiatingmessageFlowRef";
+    final String PROPERTY_RETURN_MESSAGE_FLOW_REF = "returnmessageFlowRef";
 }

@@ -43,23 +43,23 @@ public class ProcessExport implements BpmnXMLConstants {
         // start process element
     	if( model.getModelType() != null && model.getModelType() == 6) {
     		// init choreography 
-    		for (FlowElement flowElement : process.getFlowElements()) {
-    			if(flowElement instanceof ChoreographyTask) {
-    				ChoreographyTask chor = (ChoreographyTask) flowElement;
-    				if(chor.getInitiatingMessage() != null) {
-    					xtw.writeStartElement(ELEMENT_MESSAGE);
-    					xtw.writeAttribute(ATTRIBUTE_ID, "initMessage" + chor.getId());
-    					xtw.writeAttribute(ATTRIBUTE_NAME, chor.getInitiatingMessage());
-    					xtw.writeEndElement();
-    				}
-    				if(chor.getReturnMessage() != null) {
-    					xtw.writeStartElement(ELEMENT_MESSAGE);
-    					xtw.writeAttribute(ATTRIBUTE_ID, "retMessage" + chor.getId());
-    					xtw.writeAttribute(ATTRIBUTE_NAME, chor.getReturnMessage());
-    					xtw.writeEndElement();
-    				}
-    			}
-			}
+//    		for (FlowElement flowElement : process.getFlowElements()) {
+//    			if(flowElement instanceof ChoreographyTask) {
+//    				ChoreographyTask chor = (ChoreographyTask) flowElement;
+//    				if(chor.getInitiatingMessage() != null) {
+//    					xtw.writeStartElement(ELEMENT_MESSAGE);
+//    					xtw.writeAttribute(ATTRIBUTE_ID, "initMessage" + chor.getId());
+//    					xtw.writeAttribute(ATTRIBUTE_NAME, chor.getInitiatingMessage());
+//    					xtw.writeEndElement();
+//    				}
+//    				if(chor.getReturnMessage() != null) {
+//    					xtw.writeStartElement(ELEMENT_MESSAGE);
+//    					xtw.writeAttribute(ATTRIBUTE_ID, "retMessage" + chor.getId());
+//    					xtw.writeAttribute(ATTRIBUTE_NAME, chor.getReturnMessage());
+//    					xtw.writeEndElement();
+//    				}
+//    			}
+//			}
     		xtw.writeStartElement(ELEMENT_CHOREOGRAPHY);
     	} else {
     		xtw.writeStartElement(ELEMENT_PROCESS);

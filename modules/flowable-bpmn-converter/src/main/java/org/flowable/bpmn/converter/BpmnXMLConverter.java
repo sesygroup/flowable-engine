@@ -523,7 +523,6 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 
                 } else if (ELEMENT_PARTICIPANT.equals(xtr.getLocalName())) {
                     participantParser.parse(xtr, model);
-                    // TODO setta un lista di partecipanti da passare al coreography task
 
                 } else if (ELEMENT_MESSAGE_FLOW.equals(xtr.getLocalName())) {
                     messageFlowParser.parse(xtr, model);
@@ -737,40 +736,88 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 			ChoreographyTask chor = (ChoreographyTask) flowElement;
 			if(chor.getInitiatingPartecipant() != null && !participantNoRepeat.contains(chor.getInitiatingPartecipant())) {
 				xtw.writeStartElement(ELEMENT_PARTECIPANT);
-				xtw.writeAttribute(ATTRIBUTE_ID, chor.getInitiatingPartecipant().replace(" ", "_"));
+				if(chor.getInitiatingPartecipantId() != null) {
+					xtw.writeAttribute(ATTRIBUTE_ID, chor.getInitiatingPartecipantId());
+				} else {
+					xtw.writeAttribute(ATTRIBUTE_ID, chor.getInitiatingPartecipant().replace(" ", "_"));
+				}
+//				xtw.writeAttribute(ATTRIBUTE_ID, chor.getInitiatingPartecipant().replace(" ", "_"));
 				xtw.writeAttribute(ATTRIBUTE_NAME, chor.getInitiatingPartecipant()); 
 				xtw.writeEndElement();
 				participantNoRepeat.add(chor.getInitiatingPartecipant());
 			}
 			if(chor.getPartecipant() != null && !participantNoRepeat.contains(chor.getPartecipant())) {
 				xtw.writeStartElement(ELEMENT_PARTECIPANT);
-				xtw.writeAttribute(ATTRIBUTE_ID, chor.getPartecipant().replace(" ", "_"));
+				if(chor.getPartecipantId() != null) {
+					xtw.writeAttribute(ATTRIBUTE_ID, chor.getPartecipantId());
+				} else {
+					xtw.writeAttribute(ATTRIBUTE_ID, chor.getPartecipant().replace(" ", "_"));
+				}
+//				xtw.writeAttribute(ATTRIBUTE_ID, chor.getPartecipant().replace(" ", "_"));
 				xtw.writeAttribute(ATTRIBUTE_NAME, chor.getPartecipant()); 
 				xtw.writeEndElement();
 				participantNoRepeat.add(chor.getPartecipant());
 			}
 			if(chor.getInitiatingMessage() != null) {
 				xtw.writeStartElement(ELEMENT_MESSAGE_FLOW);
-				xtw.writeAttribute(ATTRIBUTE_ID, "initMessageFlow" + chor.getId());
+				if(chor.getInitiatingMessageFlowRef() != null) {
+					xtw.writeAttribute(ATTRIBUTE_ID, chor.getInitiatingMessageFlowRef());
+				} else {
+					xtw.writeAttribute(ATTRIBUTE_ID, "initMessageFlow" + chor.getId());
+				}
 				if(chor.getPartecipant() != null) {
-					xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getPartecipant().replace(" ", "_"));
+					if(chor.getPartecipantId() != null) {
+						xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getPartecipantId());
+					} else {
+						xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getPartecipant().replace(" ", "_"));
+					}
+//					xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getPartecipant().replace(" ", "_"));
 				}
 				if(chor.getInitiatingPartecipant()!= null) {
-					xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getInitiatingPartecipant().replace(" ", "_"));
+					if(chor.getInitiatingPartecipantId() != null) {
+						xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getInitiatingPartecipantId());
+					} else {
+						xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getInitiatingPartecipant().replace(" ", "_"));
+					}
+//					xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getInitiatingPartecipant().replace(" ", "_"));
 				}
-				xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, "initMessage" + chor.getId());
+				if(chor.getInitiatingMessageId() != null) {
+					xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, chor.getInitiatingMessageId());
+				} else {
+					xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, "initMessage" + chor.getId());
+				}
+//				xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, "initMessage" + chor.getId());
 				xtw.writeEndElement();
 			}
 			if(chor.getReturnMessage() != null) {
 				xtw.writeStartElement(ELEMENT_MESSAGE_FLOW);
-				xtw.writeAttribute(ATTRIBUTE_ID, "retMessageFlow" + chor.getId());
+				if(chor.getReturnMessageFlowRef() != null) {
+					xtw.writeAttribute(ATTRIBUTE_ID, chor.getReturnMessageFlowRef());
+				} else {
+					xtw.writeAttribute(ATTRIBUTE_ID, "retMessageFlow" + chor.getId());
+				}
 				if(chor.getInitiatingPartecipant()!= null) {
-					xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getInitiatingPartecipant().replace(" ", "_"));
+					if(chor.getInitiatingPartecipantId() != null) {
+						xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getInitiatingPartecipantId());
+					} else {
+						xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getInitiatingPartecipant().replace(" ", "_"));
+					}
+					//xtw.writeAttribute(ELEMENT_TARGET_REF, chor.getInitiatingPartecipant().replace(" ", "_"));
 				}
 				if(chor.getPartecipant() != null) {
-					xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getPartecipant().replace(" ", "_"));
+					if(chor.getPartecipantId() != null) {
+						xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getPartecipantId());
+					} else {
+						xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getPartecipant().replace(" ", "_"));
+					}
+//					xtw.writeAttribute(ELEMENT_SOURCE_REF, chor.getPartecipant().replace(" ", "_"));
 				}
-				xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, "retMessage" + chor.getId());
+				if(chor.getReturnMessageId() != null) {
+					xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, chor.getReturnMessageId());
+				} else {
+					xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, "retMessage" + chor.getId());
+				}
+//				xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, "retMessage" + chor.getId());
 				xtw.writeEndElement();
 			}
     	}

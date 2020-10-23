@@ -309,15 +309,6 @@ public class ModelServiceImpl implements ModelService {
             childNode.set("stencil", stencilNode);
             stencilNode.put("id", "StartNoneEvent");
             json = editorNode.toString();
-            Bpmn2ChoreographyProjector bpmn2ChoreographyProjector = new Bpmn2ChoreographyProjector();
-            Bpmn2ChoreographyProjectorRequest bpmn2ChoreographyProjectorRequest = new Bpmn2ChoreographyProjectorRequest();
-            bpmn2ChoreographyProjectorRequest.setParticipantUsedToBpmn2Projection("p1");
-			try {
-				bpmn2ChoreographyProjector.project(bpmn2ChoreographyProjectorRequest);
-			} catch (Bpmn2ChoreographyProjectorException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
         } else {
             ObjectNode editorNode = objectMapper.createObjectNode();
             editorNode.put("id", "canvas");

@@ -49,8 +49,10 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
             			if(participantImport.equals(participant.getId())) {
             				if(initiatingId != null && initiatingId.equals(participant.getId())) {
             					choreographyTask.setInitiatingPartecipant(participant.getName());
+            					choreographyTask.setInitiatingPartecipantId(participant.getId());
             				} else {
             					choreographyTask.setPartecipant(participant.getName());
+            					choreographyTask.setPartecipantId(participant.getId());
             				}
             			}
 					}
@@ -68,8 +70,12 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
     						if(messageImport != null) {
     							if(initiatingId != null && initiatingId.equals(messageFlow.getSourceRef())) {
         							choreographyTask.setInitiatingMessage(messageImport.getName());
+        							choreographyTask.setInitiatingMessageId(messageImport.getId());
+        							choreographyTask.setInitiatingMessageFlowRef(messageFlow.getId());
         						} else {
         							choreographyTask.setReturnMessage(messageImport.getName());
+        							choreographyTask.setReturnMessageId(messageImport.getId());
+        							choreographyTask.setReturnMessageFlowRef(messageFlow.getId());
         						}
     						}
     					}
@@ -89,25 +95,48 @@ public class ChoreographyTaskXMLConverter extends BaseBpmnXMLConverter {
 	protected void writeAdditionalAttributes(BaseElement element, BpmnModel model, XMLStreamWriter xtw)
 			throws Exception {
 		ChoreographyTask choreographyTask = (ChoreographyTask) element;
-		writeDefaultAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT,choreographyTask.getInitiatingPartecipant().replace(" ", "_") ,xtw);
+		if(choreographyTask.getInitiatingPartecipantId() != null) {
+			writeDefaultAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT,choreographyTask.getInitiatingPartecipantId() ,xtw);
+		} else {
+			writeDefaultAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT,choreographyTask.getInitiatingPartecipant().replace(" ", "_") ,xtw);
+		}
+//		writeDefaultAttribute(ATTRIBUTE_TASK_CHOREOGRAPHY_INIT_PARTECIPANT,choreographyTask.getInitiatingPartecipant().replace(" ", "_") ,xtw);
 		if(choreographyTask.getInitiatingPartecipant() != null) {
 			xtw.writeStartElement(ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT);
-			xtw.writeCharacters(choreographyTask.getInitiatingPartecipant().replace(" ", "_"));
+			if(choreographyTask.getInitiatingPartecipantId() != null) {
+				xtw.writeCharacters(choreographyTask.getInitiatingPartecipantId());
+			} else {
+				xtw.writeCharacters(choreographyTask.getInitiatingPartecipant().replace(" ", "_"));
+			}
+//			xtw.writeCharacters(choreographyTask.getInitiatingPartecipant().replace(" ", "_"));
 			xtw.writeEndElement();
 		}
 		if(choreographyTask.getPartecipant() != null) {
 			xtw.writeStartElement(ATTRIBUTE_TASK_CHOREOGRAPHY_PARTECIPANT);
-			xtw.writeCharacters(choreographyTask.getPartecipant().replace(" ", "_"));
+			if(choreographyTask.getPartecipantId() != null) {
+				xtw.writeCharacters(choreographyTask.getPartecipantId());
+			} else {
+				xtw.writeCharacters(choreographyTask.getPartecipant().replace(" ", "_"));
+			}
+//			xtw.writeCharacters(choreographyTask.getPartecipant().replace(" ", "_"));
 			xtw.writeEndElement();
 		}
 		if(choreographyTask.getInitiatingMessage() != null) {
 			xtw.writeStartElement(ELEMENT_MESSAGEFLOW_REF);
-			xtw.writeCharacters("initMessageFlow" + choreographyTask.getId());
+			if(choreographyTask.getInitiatingMessageFlowRef() != null) {
+				xtw.writeCharacters(choreographyTask.getInitiatingMessageFlowRef());
+			} else {
+				xtw.writeCharacters("initMessageFlow" + choreographyTask.getId());
+			}
 			xtw.writeEndElement();
 		}
 		if(choreographyTask.getReturnMessage() != null) {
 			xtw.writeStartElement(ELEMENT_MESSAGEFLOW_REF);
-			xtw.writeCharacters("retMessageFlow" + choreographyTask.getId());
+			if(choreographyTask.getReturnMessageFlowRef() != null ) {
+				xtw.writeCharacters(choreographyTask.getReturnMessageFlowRef());
+			} else {
+				xtw.writeCharacters("retMessageFlow" + choreographyTask.getId());
+			}
 			xtw.writeEndElement();
 		}
 	}

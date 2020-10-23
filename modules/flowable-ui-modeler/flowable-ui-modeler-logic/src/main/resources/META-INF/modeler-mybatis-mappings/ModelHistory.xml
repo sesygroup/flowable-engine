@@ -59,7 +59,7 @@
             #{modelId, jdbcType=VARCHAR},
             #{removalDate, jdbcType=TIMESTAMP},
             #{tenantId, jdbcType=VARCHAR},
-            #{model_ref, jdbcType=VARCHAR},
+            #{modelRef, jdbcType=VARCHAR},
             #{participant, jdbcType=VARCHAR}
           )
     </insert>
@@ -80,7 +80,7 @@
             model_id = #{modelId, jdbcType=VARCHAR},
             removal_date = #{removalDate, jdbcType=TIMESTAMP},
             tenant_id = #{tenantId, jdbcType=VARCHAR},
-            model_ref = #{model_ref, jdbcType=VARCHAR},
+            model_ref = #{modelRef, jdbcType=VARCHAR},
             participant = #{participant, jdbcType=VARCHAR}
         </set>
         where id = #{id, jdbcType=VARCHAR}

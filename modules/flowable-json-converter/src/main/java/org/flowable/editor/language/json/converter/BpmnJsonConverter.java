@@ -304,15 +304,15 @@ public class BpmnJsonConverter implements EditorJsonConstants, StencilConstants,
         propertiesNode.put(PROPERTY_IS_EAGER_EXECUTION_FETCHING, Boolean.valueOf(mainProcess.isEnableEagerExecutionTreeFetching()));
 
         //choreography skip this
-        if(model.getModelType() != 6 || model.getModelType() == 7) {
+       // if(model.getModelType() != 6 || model.getModelType() == 7) {
         	BpmnJsonConverterUtil.convertMessagesToJson(model.getMessages(), propertiesNode);
-        }
+        //}
         BpmnJsonConverterUtil.convertListenersToJson(mainProcess.getExecutionListeners(), true, propertiesNode);
         BpmnJsonConverterUtil.convertEventListenersToJson(mainProcess.getEventListeners(), propertiesNode);
         BpmnJsonConverterUtil.convertSignalDefinitionsToJson(model, propertiesNode);
-        if(model.getModelType() != 6 || model.getModelType() == 7) {
+//        if(model.getModelType() != 6 || model.getModelType() == 7) {
         	BpmnJsonConverterUtil.convertMessagesToJson(model, propertiesNode);
-        }
+//        }
         BpmnJsonConverterUtil.convertEscalationDefinitionsToJson(model, propertiesNode);
 
         if (CollectionUtils.isNotEmpty(mainProcess.getDataObjects())) {

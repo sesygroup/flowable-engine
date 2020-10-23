@@ -46,6 +46,24 @@ public class ChoreographyTaskJsonConverter extends BaseBpmnJsonConverter{
 			if(StringUtils.isNotEmpty(choreographyTask.getReturnMessage())) {
 				propertiesNode.put(PROPERTY_RETURN_MESSAGE, choreographyTask.getReturnMessage());
 			}
+			if(StringUtils.isNotEmpty(choreographyTask.getInitiatingPartecipantId())) {
+				propertiesNode.put(PROPERTY_INITIATING_PARTECIPANT_ID, choreographyTask.getInitiatingPartecipantId());
+			}
+			if(StringUtils.isNotEmpty(choreographyTask.getPartecipantId())) {
+				propertiesNode.put(PROPERTY_PERTECIPANT_ID, choreographyTask.getPartecipantId());
+			}
+			if(StringUtils.isNotEmpty(choreographyTask.getInitiatingMessageId())) {
+				propertiesNode.put(PROPERTY_INITIATING_MESSAGE_ID, choreographyTask.getInitiatingMessageId());
+			}
+			if(StringUtils.isNotEmpty(choreographyTask.getReturnMessageId())) {
+				propertiesNode.put(PROPERTY_RETURN_MESSAGE_ID, choreographyTask.getReturnMessageId());
+			}
+			if(StringUtils.isNotEmpty(choreographyTask.getInitiatingMessageFlowRef())) {
+				propertiesNode.put(PROPERTY_INITIATING_MESSAGE_FLOW_REF, choreographyTask.getInitiatingMessageFlowRef());
+			}
+			if(StringUtils.isNotEmpty(choreographyTask.getReturnMessageFlowRef())) {
+				propertiesNode.put(PROPERTY_RETURN_MESSAGE_FLOW_REF, choreographyTask.getReturnMessageFlowRef());
+			}
 		}
 
 		@Override
@@ -64,6 +82,24 @@ public class ChoreographyTaskJsonConverter extends BaseBpmnJsonConverter{
 		     }
 			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_RETURN_MESSAGE, elementNode))) {
 				 choreographyTask.setReturnMessage(getPropertyValueAsString(PROPERTY_RETURN_MESSAGE, elementNode));
+		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_INITIATING_PARTECIPANT_ID, elementNode))) {
+				 choreographyTask.setInitiatingPartecipantId(getPropertyValueAsString(PROPERTY_INITIATING_PARTECIPANT_ID, elementNode));
+		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_PERTECIPANT_ID, elementNode))) {
+				 choreographyTask.setPartecipantId(getPropertyValueAsString(PROPERTY_PERTECIPANT_ID, elementNode));
+		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_INITIATING_MESSAGE_ID, elementNode))) {
+				 choreographyTask.setInitiatingMessageId(getPropertyValueAsString(PROPERTY_INITIATING_MESSAGE_ID, elementNode));
+		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_RETURN_MESSAGE_ID, elementNode))) {
+				 choreographyTask.setReturnMessageId(getPropertyValueAsString(PROPERTY_RETURN_MESSAGE_ID, elementNode));
+		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_INITIATING_MESSAGE_FLOW_REF, elementNode))) {
+				 choreographyTask.setInitiatingMessageFlowRef(getPropertyValueAsString(PROPERTY_INITIATING_MESSAGE_FLOW_REF, elementNode));
+		     }
+			 if (StringUtils.isNotEmpty(getPropertyValueAsString(PROPERTY_RETURN_MESSAGE_FLOW_REF, elementNode))) {
+				 choreographyTask.setReturnMessageFlowRef(getPropertyValueAsString(PROPERTY_RETURN_MESSAGE_FLOW_REF, elementNode));
 		     }
 			
 			return choreographyTask;
